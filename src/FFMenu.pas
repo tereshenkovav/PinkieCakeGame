@@ -13,17 +13,17 @@ uses
 const
   LEVEL_BY_ROW=3 ;
   BUT_Y = 550 ;
-  BUT_EXIT_X = 120 ;
-  BUT_ABOUT_X = 280 ;
+  BUT_EXIT_X = 640 ;
+  BUT_ABOUT_X = 500 ;
 
 function PosLeft(i:Integer):Integer ;
 begin
-  Result:=450+((i-1) mod LEVEL_BY_ROW)*110 ;
+  Result:=450+((i-1) mod LEVEL_BY_ROW)*120 ;
 end ;
 
 function PosTop(i:Integer):Integer ;
 begin
-  Result:=250+((i-1) div LEVEL_BY_ROW)*50 ;
+  Result:=140+((i-1) div LEVEL_BY_ROW)*50 ;
 end ;
 
 function FrameFuncMenu():Boolean ;
@@ -81,8 +81,7 @@ begin
 
   sprBack.Render(0,0) ;
 
-  SRStart.SetScaleBoth(75);
-  SRStart.RenderAt(10,100);
+  SRStart.RenderAt(70,300);
 
   fnt2.SetColor($FFFFFFFF) ;
   for i := 1 to GetCurrentLevelCount() do
@@ -103,20 +102,20 @@ begin
   SRButBack.Render() ;
   fnt2.PrintF(BUT_ABOUT_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_ABOUT'],[]);
 
-  sprMouse.Render(mx,my) ;
-
   fnt2.SetColor($FF404040);
-  fnt2.PrintF(400,40,HGETEXT_LEFT,Texts.Values['HISTORY'],[]);
-  fnt2.PrintF(560,190,HGETEXT_CENTER,Texts.Values['LEVELSELECT'],[]);
+  fnt2.PrintF(40,120,HGETEXT_LEFT,Texts.Values['HISTORY'],[]);
+  fnt2.PrintF(560,60,HGETEXT_CENTER,Texts.Values['LEVELSELECT'],[]);
 
   if not PL.IsSoundOn() then begin
     SRNoSound.bright:=IfThen(SRNoSound.IsMouseOver(mx,my),140,100) ;
-    SRNoSound.RenderAt(30,30)
+    SRNoSound.RenderAt(20,20);
   end
   else begin
     SRSound.bright:=IfThen(SRSound.IsMouseOver(mx,my),140,100) ;
-    SRSound.RenderAt(30,30);
+    SRSound.RenderAt(20,20);
   end ;
+
+  sprMouse.Render(mx,my) ;
 
   mHGE.Gfx_EndScene;
 end;

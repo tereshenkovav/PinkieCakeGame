@@ -16,9 +16,9 @@ var tekmode:TWinFailMode ;
 
 const
   BUT_Y = 500 ;
-  BUT_REPLAY_X = 252 ;
+  BUT_REPLAY_X = 212 ;
   BUT_MENU_X = 402 ;
-  BUT_NEXT_X = 552 ;
+  BUT_NEXT_X = 592 ;
 
 function FrameFuncWinOrFail():Boolean ;
 var mx,my:Single ;
@@ -27,23 +27,24 @@ begin
 
   mHGE.Input_GetMousePos(mx,my);
 
-  if mHGE.Input_KeyDown(HGEK_ESCAPE) then begin
-    Result:=True ;
-    Exit ;
-  end ;
+  if mHGE.Input_KeyDown(HGEK_ESCAPE) then GoMenu() ;
+  if mHGE.Input_KeyDown(HGEK_F5) then GoAutoGame(ActiveLevel) ;
+  if mHGE.Input_KeyDown(HGEK_ENTER) then
+    if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then
+      GoAutoGame(ActiveLevel+1) ;
 
+  SRButBack.scalex:=145 ;
   if mHGE.Input_KeyDown(HGEK_LBUTTON) then begin
     SRButBack.SetXY(BUT_MENU_X,BUT_Y) ;
     if SRButBack.IsMouseOver(mx,my) then GoMenu() ;
     SRButBack.SetXY(BUT_REPLAY_X,BUT_Y) ;
-    if SRButBack.IsMouseOver(mx,my) then
-      GoAutoGame(ActiveLevel) ;
+    if SRButBack.IsMouseOver(mx,my) then GoAutoGame(ActiveLevel) ;
     SRButBack.SetXY(BUT_NEXT_X,BUT_Y) ;
     if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then
-      if SRButBack.IsMouseOver(mx,my) then
-        GoAutoGame(ActiveLevel+1) ;
+      if SRButBack.IsMouseOver(mx,my) then GoAutoGame(ActiveLevel+1) ;
   end;
 
+  SRButBack.scalex:=100 ;
 end ;
 
 function RenderFuncWinOrFail():Boolean ;
@@ -67,6 +68,7 @@ begin
 
   fnt2.SetColor($FFFFFFFF) ;
 
+  SRButBack.scalex:=145 ;
   SRButBack.SetXY(BUT_MENU_X,BUT_Y) ;
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
   SRButBack.Render() ;
@@ -83,6 +85,8 @@ begin
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
   SRButBack.Render() ;
   fnt2.PrintF(BUT_REPLAY_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_REPLAY'],[]);
+
+  SRButBack.scalex:=100 ;
 
   sprMouse.Render(mx,my) ;
 
