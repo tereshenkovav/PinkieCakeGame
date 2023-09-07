@@ -25,13 +25,13 @@ function CreateWater(StartLevel:Integer; IsUp:Boolean):TWater ;
 function CreateFakeWater():TWater ;
 
 implementation
-uses FFGame, simple_oper ;
+uses FFGame, Math ;
 
 function CreateWater(StartLevel:Integer; IsUp:Boolean):TWater ;
 begin
   Result:=TWaterStd.Create() ;
   TWaterStd(Result).Level:=StartLevel ;
-  TWaterStd(Result).Dir:=Alternate(IsUp,-1,1) ;
+  TWaterStd(Result).Dir:=IfThen(IsUp,-1,1) ;
 end;
 
 function CreateFakeWater():TWater ;

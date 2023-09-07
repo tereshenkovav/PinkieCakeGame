@@ -3,60 +3,60 @@ unit CommonProc;
 interface
 uses Classes ;
 
-procedure LoadGameResourcesCommon(code:string) ;
+procedure LoadGameResourcesCommon() ;
 procedure UnLoadGameResourcesCommon() ;
-function GetLevelCountByGame(Code:string):Integer ;
+function GetLevelCountByGame():Integer ;
 procedure GoAutoGame(Level:Integer) ;
+function AppDataPath():string ;
 
 implementation
 uses SysUtils, ObjModule, TAVHGEUtils, SpriteEffects, SoundHelper,
-  FFGame, simple_oper ;
+  FFGame ;
 
-var LCList:TStringList ;
+var R:Integer=-1 ;
+
+function AppDataPath():string ;
+begin
+  Result:=ExtractFileDir(ParamStr(0))
+end ;
 
 procedure GoAutoGame(Level:Integer) ;
 begin
   FFGame.GoGameLevel(Level) ;
 end;
 
-function GetLevelCountByGame(Code:string):Integer ;
-var idx,R:Integer ;
+function GetLevelCountByGame():Integer ;
 begin
-  if LCList=nil then LCList:=TStringList.Create ;
-
-  if LCList.IndexOfName(Code)=-1 then begin
+  if R=-1 then begin
     R:=0 ;
-    while FileExists(Format(Code+'_level%d',[R+1])) do Inc(R) ;
-    idx:=LCList.Add(Format('%s=%d',[Code,R])) ;
+    while FileExists(Format('pinki_level%d',[R+1])) do Inc(R) ;
   end ;
-  Result:=StrToIntWt0(LCList.Values[Code]) ;
-
-
+  Result:=R ;
 end;
 
-procedure LoadGameResourcesCommon(code:string) ;
+procedure LoadGameResourcesCommon() ;
 var i:Integer ;
 begin
-  SRStart:=TSpriteRender.Create(LoadSizedSprite(mHGE,code+'_start.png'));
-  SRWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,code+'_win.png'));
-  SRFinalWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,code+'_finalwin.png'));
-  SRFail:=TSpriteRender.Create(LoadSizedSprite(mHGE,code+'_fail.png'));
+  SRStart:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_start.png'));
+  SRWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_win.png'));
+  SRFinalWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_finalwin.png'));
+  SRFail:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_fail.png'));
 
   SndWin:=LoadSound('win.mp3') ;
 
   for i := 1 to GetCurrentLevelCount do
     SRButCmn[i]:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
-      Format('butcmn_%s.png',[code])));
+      'butcmn_pinki.png'));
 
   SRButBack:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
-      Format('butcmn_%s.png',[code])));
+      'butcmn_pinki.png'));
 
   SRButMenu:=TSpriteRender.Create(LoadSizedSprite(mHGE,
-    Format('butmenu_%s.png',[code])));
+    'butmenu_pinki.png'));
   SRButReplay:=TSpriteRender.Create(LoadSizedSprite(mHGE,
-    Format('butreplay_%s.png',[code])));
+    'butreplay_pinki.png'));
   SRButNext:=TSpriteRender.Create(LoadSizedSprite(mHGE,
-    Format('butnext_%s.png',[code])));
+    'butnext_pinki.png'));
 
   SRDiscordHelper:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
     'discord_helper.png')) ;

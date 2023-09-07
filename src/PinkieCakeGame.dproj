@@ -156,7 +156,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="CommonClasses.pas"/>
         <DCCReference Include="CommonProc.pas"/>
         <DCCReference Include="FFGame.pas"/>
         <DCCReference Include="FFMenu.pas"/>

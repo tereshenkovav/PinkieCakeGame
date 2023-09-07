@@ -239,7 +239,52 @@ type
   end;
 
 implementation
-uses SysUtils, Classes, simple_oper ;
+uses SysUtils, Classes ;
+
+function HexToStr(const s:string):string ;
+var k,mk:integer ;
+    h1,h2,b:byte ;
+    s1:string ;
+begin
+  mk:=(length(s) div 2)  ;
+  s1:=StringOfChar(#32,mk) ;
+  for k:=1 to mk do begin
+    h1:=ord(s[k*2-1]) ;
+    h2:=ord(s[k*2]) ;
+    if h1 < 58 then dec(h1,48) else dec(h1,55) ;
+    if h2 < 58 then dec(h2,48) else dec(h2,55) ;
+    b:=(h1 shl 4)+h2 ;
+    s1[k]:=chr(b) ;
+  end ;
+  Result:=s1 ;
+end ;
+
+function StrToHex(const s:string):string ;
+var k,mk:integer ;
+    h1,h2,b:byte ;
+    s1:string ;
+begin
+  mk:=length(s)  ;
+  s1:=StringOfChar(#32,mk shl 1) ;
+  for k:=1 to mk do begin
+    b:=ord(s[k]) ;
+    h1:=b div 16 ;
+    h2:=b mod 16 ;
+    if h1 < 10 then s1[2*k-1]:=chr(h1+48) else s1[2*k-1]:=chr(h1+55) ;
+    if h2 < 10 then s1[2*k]:=chr(h2+48) else s1[2*k]:=chr(h2+55) ;
+  end ;
+  Result:=s1 ;
+end ;
+
+function IntToStrWt0(a:Integer):string ;
+begin
+  if a=0 then Result:='' else Result:=IntToStr(a) ;
+end ;
+
+function StrToIntWt0(s:string):Integer ;
+begin
+  if Trim(s)='' then Result:=0 else Result:=StrToInt(s) ;
+end ;
 
 { TSEAbstractLinear }
 

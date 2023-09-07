@@ -18,7 +18,7 @@ function GetCurrentLevelCount():Integer ;
 implementation
 uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   FFWinFail, SpriteEffects, HGESprite, Gamer, Classes,
-  SysUtils, simple_oper, KeyStrList, Water, SoundHelper ;
+  SysUtils, Water, SoundHelper, Math ;
 
 type
   TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft) ;
@@ -40,7 +40,7 @@ var
 
 function GetCurrentLevelCount():Integer ;
 begin
-  Result:=GetLevelCountByGame(CurrentGameCode) ;
+  Result:=GetLevelCountByGame() ;
 end;
 
 procedure LoadLevel(n:Integer) ;
@@ -51,7 +51,7 @@ begin
   SEPool.DelAllEffects ;
 
   List:=TStringList.Create ;
-  List.LoadFromFile(Format(CurrentGameCode+'_level%d',[n])) ;
+  List.LoadFromFile(Format('pinki_level%d',[n])) ;
 
   G:=TGamer.Create(StrToInt(List[0]),StrToInt(List[1]),BLOCKW) ;
   with TStringList.Create() do begin
@@ -165,12 +165,12 @@ begin
         sprCake[Round(Random(CakeCount))],
         GetBlockLeft(i),GetBlockTop(j));
 
-      arr_blocks[i,j].transp:=Alternate(arr_places[i,j]=pSpace,100,0) ;
+      arr_blocks[i,j].transp:=IfThen(arr_places[i,j]=pSpace,100,0) ;
 
       SRPool.AddRender(arr_blocks[i,j]);
     end;
 
-  SRGamer:=TSpriteRender.Create(LoadSizedSprite(mHGE,CurrentGameCode+'_gamer.png'));
+  SRGamer:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_gamer.png'));
 end ;
 
 procedure UnloadGameResources() ;
@@ -323,7 +323,7 @@ Fin1:
   if IsWin() then begin
     PlaySound(SndWin) ;
     UnloadGameResources() ;
-    PL.SigLevelCompleted(CurrentGameCode,ActiveLevel);
+    PL.SigLevelCompleted(ActiveLevel);
     GoWin() ;
   end;
 

@@ -14,7 +14,7 @@ procedure SaveSoundOpt() ;
 procedure LoadSoundOpt() ;
 
 implementation
-uses TAVHGEUtils, IniFiles, simple_files ;
+uses TAVHGEUtils, IniFiles, CommonProc ;
 
 
 procedure InitLib() ;
@@ -23,7 +23,7 @@ end;
 
 procedure SaveSoundOpt() ;
 begin
-  with TIniFile.Create(AppPath+'/sound.ini') do begin
+  with TIniFile.Create(AppDataPath+'/sound.ini') do begin
     WriteBool('Main','NoSound',UserNoSound) ;
     Free ;
   end;
@@ -31,7 +31,7 @@ end;
 
 procedure LoadSoundOpt() ;
 begin
-  with TIniFile.Create(AppPath+'/sound.ini') do begin
+  with TIniFile.Create(AppDataPath+'/sound.ini') do begin
     UserNoSound:=ReadBool('Main','NoSound',False) ;
     Free ;
   end;

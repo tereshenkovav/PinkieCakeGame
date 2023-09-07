@@ -1,11 +1,12 @@
 unit TAVHGEUtils ;
 
+{ В данной версии библиотеки убрана процедура LoadFilesToSRPool }
+
 interface
 uses HGESprite, HGE, WindowOptions, Windows, SpriteEffects ;
 
 type
   TCaliberRes = (crRealSize,cr2powNSize) ;
-  TfuncTagTransform = function(tag:string):string ;
 
 procedure SetPathForLoader(Path:string) ;  
 function LoadSizedSprite(mHGE:IHGE; FileName:string):THGESprite ;
@@ -24,8 +25,6 @@ function DoCalibrateHGELocker(mHGE:IHGE; var CaliberRes:TCaliberRes):Boolean ;
 procedure SetFuncsAndRun(mHGE:IHGE; const FrameFunc,RenderFunc:THGECallback) ;
 procedure SetFuncsNoRun(mHGE:IHGE; const FrameFunc,RenderFunc:THGECallback) ;
 function InvertColor(Color:LongWord):LongWord ;
-procedure LoadFilesToSRPool(SRPool:TSpriteRenderPool; mask:string; subpath:string='';
-  tagTransform:TfuncTagTransform=nil) ;
 
 var
   GCaliber:TCaliberRes ;
@@ -36,7 +35,7 @@ var
   WO:TWindowOptions ;
 
 implementation
-uses SysUtils, Math, UnitFileSys, Classes, simple_files ;
+uses SysUtils, Math, Classes ;
 
 procedure SetPathForLoader(Path:string) ;
 begin
@@ -234,47 +233,5 @@ begin
   Result:=Result+(((Color shr 8) and $FF) shl 8) and $00FF00 ;
   Result:=Result+(((Color shr 16) and $FF) shl 0) and $0000FF ;
 end ;
-
-procedure LoadFilesToSRPool(SRPool:TSpriteRenderPool; mask:string;
-  subpath:string=''; tagTransform:TfuncTagTransform=nil) ;
-var List:TStringList ;
-    IsOk:Boolean ;
-    i:Integer ;
-    OldPath:string ;
-    tag:string ;
-    imagefilename:string ;
-    using_aliases:Boolean ;
-begin
-  if subpath<>'' then begin
-    OldPath:=PathLoader ;
-    PathLoader:=PathLoader+subpath+'\' ;
-  end;
-
-  using_aliases:=FileExists(PathLoader+'.aliases') ;
-
-  List:=CreateFilesList(PathLoader,Mask,IsOk) ;
-  for i := 0 to List.Count - 1 do begin
-    tag:=NameWithoutExt(OnlyFile(List[i])) ;
-
-    imagefilename:=List[i] ;
-    if (tag[Length(tag)]='@')and(using_aliases) then begin
-      tag:=Copy(tag,1,Length(tag)-1) ;
-      with TStringList.Create() do begin
-        LoadFromFile(PathLoader+imagefilename) ;
-        imagefilename:=Values['filename'] ;
-        Free ;
-      end;
-    end;
-
-    if Assigned(tagTransform) then tag:=tagTransform(tag) ;
-
-    SRPool.AddRenderTagged(TSpriteRender.Create(
-      LoadAndCenteredSizedSprite(mHGE,imagefilename)),
-      tag);
-  end;
-  List.Free ;
-
-  if subpath<>'' then PathLoader:=OldPath ;
-end;
 
 end.

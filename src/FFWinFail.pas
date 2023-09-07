@@ -6,7 +6,7 @@ procedure GoWin ;
 procedure GoFail ;
 
 implementation
-uses ObjModule, TAVHGEUtils, HGE, HGEFont, simple_oper, FFMenu, FFGame,
+uses ObjModule, TAVHGEUtils, HGE, HGEFont, FFMenu, FFGame, Math,
   CommonProc ;
 
 type
@@ -53,15 +53,15 @@ begin
   end
   else SRFail.RenderAt(300,250) ;
 
-  SRButMenu.bright:=Alternate(SRButMenu.IsMouseOver(mx,my),200,100) ;
+  SRButMenu.bright:=IfThen(SRButMenu.IsMouseOver(mx,my),200,100) ;
   SRButMenu.RenderAt(350,500) ;
 
-  SRButNext.bright:=Alternate(SRButNext.IsMouseOver(mx,my),200,100) ;
-  SRButNext.transp:=Alternate(
+  SRButNext.bright:=IfThen(SRButNext.IsMouseOver(mx,my),200,100) ;
+  SRButNext.transp:=IfThen(
     (Mode=mWin)and(ActiveLevel<GetCurrentLevelCount),0,100) ;
   SRButNext.RenderAt(500,500) ;
 
-  SRButReplay.bright:=Alternate(SRButReplay.IsMouseOver(mx,my),200,100) ;
+  SRButReplay.bright:=IfThen(SRButReplay.IsMouseOver(mx,my),200,100) ;
   SRButReplay.RenderAt(200,500) ;
 
   sprMouse.Render(mx,my) ;
@@ -69,12 +69,12 @@ begin
   fnt2.SetColor($FF404040);
   if Mode=mWin then begin
     if ActiveLevel<GetCurrentLevelCount then
-      str:=Texts.Values[CurrentGameCode+'_WINTEXT']
+      str:=Texts.Values['WINTEXT']
     else
-      str:=Texts.Values[CurrentGameCode+'_FINALWINTEXT'] ;
+      str:=Texts.Values['FINALWINTEXT'] ;
   end
   else
-    str:=Texts.Values[CurrentGameCode+'_FAILTEXT'] ;
+    str:=Texts.Values['FAILTEXT'] ;
 
   fnt2.PrintF(SWindowOptions.GetXCenter(),100,HGETEXT_CENTER,str,[]) ;
 

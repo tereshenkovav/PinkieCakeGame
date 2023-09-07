@@ -11,7 +11,6 @@ uses
   TAVHGEUtils,
   SpriteEffects,
   WindowOptions,
-  CommonClasses in 'CommonClasses.pas',
   CommonProc in 'CommonProc.pas',
   FFGame in 'FFGame.pas',
   FFMenu in 'FFMenu.pas',
@@ -77,7 +76,7 @@ begin
   SRNoSound:=TSpriteRender.Create(LoadSizedSprite(mHGE,'sound_no.png'));
 
   LoadSoundOpt() ;
-  LoadGameResourcesCommon(CurrentGameCode) ;
+  LoadGameResourcesCommon() ;
   GoMenu() ;
   mHGE.System_Start ;
 

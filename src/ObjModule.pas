@@ -26,7 +26,6 @@ var
 
    Texts:TStringList ;
 
-   CurrentGameCode:string='pinki' ;
    ActiveLevel:Integer ;
 
    PL:TPlayer ;

@@ -173,7 +173,7 @@ type
 procedure SetWindowOptions(WO:TWindowOptions) ;
 
 implementation
-uses SysUtils, simple_oper, Classes, TexturePainter ;
+uses SysUtils, Classes, TexturePainter, Math ;
 
 var
   _WO:TWindowOptions ;
@@ -605,9 +605,9 @@ begin
     List.Free ;
     _FontHolder._Font.PrintF(
       _WO.GetMashX()*(x+DeltaX),_WO.GetMashY()*(y+DeltaY),
-      Alternate(align=alLeft,HGETEXT_LEFT,
-      Alternate(align=alRight,HGETEXT_RIGHT,
-      Alternate(align=alCenter,HGETEXT_CENTER,0))),
+      IfThen(align=alLeft,HGETEXT_LEFT,
+      IfThen(align=alRight,HGETEXT_RIGHT,
+      IfThen(align=alCenter,HGETEXT_CENTER,0))),
       sn,[])
   //end;
 
