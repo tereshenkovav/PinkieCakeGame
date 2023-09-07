@@ -1,23 +1,25 @@
 unit CommonProc;
 
 interface
-uses Classes ;
+uses Classes, HGE ;
 
 procedure LoadGameResourcesCommon() ;
 procedure UnLoadGameResourcesCommon() ;
 function GetLevelCountByGame():Integer ;
 procedure GoAutoGame(Level:Integer) ;
 function AppDataPath():string ;
+procedure PlaySound(snd:IEffect) ;
 
 implementation
-uses SysUtils, ObjModule, TAVHGEUtils, SpriteEffects, SoundHelper,
+uses SysUtils, ObjModule, TAVHGEUtils, SpriteEffects,
   FFGame ;
 
 var R:Integer=-1 ;
 
 function AppDataPath():string ;
 begin
-  Result:=ExtractFileDir(ParamStr(0))
+  Result:=GetEnvironmentVariable('LOCALAPPDATA')+'\PinkieCakeGame'; ;
+  if not DirectoryExists(Result) then ForceDirectories(Result) ;
 end ;
 
 procedure GoAutoGame(Level:Integer) ;
@@ -42,7 +44,7 @@ begin
   SRFinalWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_finalwin.png'));
   SRFail:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_fail.png'));
 
-  SndWin:=LoadSound('win.mp3') ;
+  SndWin:=mHGE.Effect_Load('win.mp3') ;
 
   for i := 1 to GetCurrentLevelCount do
     SRButCmn[i]:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
@@ -61,6 +63,11 @@ begin
   SRDiscordHelper:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
     'discord_helper.png')) ;
     
+end ;
+
+procedure PlaySound(snd:IEffect) ;
+begin
+  if PL.IsSoundOn() then Snd.Play ;
 end ;
 
 procedure UnLoadGameResourcesCommon() ;

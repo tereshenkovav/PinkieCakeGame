@@ -18,7 +18,7 @@ function GetCurrentLevelCount():Integer ;
 implementation
 uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   FFWinFail, SpriteEffects, HGESprite, Gamer, Classes,
-  SysUtils, Water, SoundHelper, Math ;
+  SysUtils, Water, Math ;
 
 type
   TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft) ;
@@ -124,9 +124,9 @@ procedure LoadGameResources() ;
 var i,j:Integer ;
     CakeCount:Integer ;
 begin
-  SndJump:=LoadSound('jump.mp3') ;
-  SndGun:=LoadSound('gun.mp3') ;
-  SndSpring:=LoadSound('spring.wav') ;
+  SndJump:=mHGE.Effect_Load('jump.mp3') ;
+  SndGun:=mHGE.Effect_Load('gun.mp3') ;
+  SndSpring:=mHGE.Effect_Load('spring.wav') ;
 
   CakeCount:=0 ;
   while FileExists(Format('cake%d.png',[CakeCount+1])) do

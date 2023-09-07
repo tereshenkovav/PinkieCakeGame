@@ -18,7 +18,6 @@ uses
   Gamer in 'Gamer.pas',
   ObjModule in 'ObjModule.pas',
   Player in 'Player.pas',
-  SoundHelper in 'SoundHelper.pas',
   Water in 'Water.pas';
 
 var i,j:Integer ;
@@ -34,7 +33,6 @@ begin
   SpriteEffects.SetWindowOptions(SWindowOptions) ;
 
   mHGE.System_SetState(HGE_USESOUND,True) ;
-  mHGE.System_SetState(HGE_LOGFILE,'PGame.log');
   mHGE.System_SetState(HGE_TITLE,'PGame');
 
   mHGE.System_SetState(HGE_WINDOWED,not SWindowOptions.FullScreen);
@@ -48,8 +46,6 @@ begin
     mHGE := nil;
     Exit ;
   end ;
-
-  SoundHelper.InitLib() ;
 
     SEPool:=TSpriteEffectPool.Create ;
     SRPool:=TSpriteRenderPool.Create ;
@@ -75,7 +71,6 @@ begin
   SRSound:=TSpriteRender.Create(LoadSizedSprite(mHGE,'sound.png'));
   SRNoSound:=TSpriteRender.Create(LoadSizedSprite(mHGE,'sound_no.png'));
 
-  LoadSoundOpt() ;
   LoadGameResourcesCommon() ;
   GoMenu() ;
   mHGE.System_Start ;

@@ -7,12 +7,13 @@ type
   private
     FIsFirstRun:Boolean ;
     MaxLevelAval:Integer ;
+    UserNoSound:Boolean ;
   public
     function IsLevelAval(LevelN:Integer):Boolean ;
     function GetCompletedCount():Integer ;
     procedure SigLevelCompleted(LevelN:Integer) ;
-    function IsFirstRun():Boolean ;
-    procedure SetRunOk() ;
+    function IsSoundOn():Boolean ;
+    procedure SwitchSound() ;
     constructor CreateFromDefaultFile() ;
   end;
 
@@ -25,7 +26,7 @@ constructor TPlayer.CreateFromDefaultFile();
 begin
   with TIniFile.Create(AppDataPath+'\player.ini') do begin
     MaxLevelAval:=ReadInteger('Main','MaxLevelAval',1);
-    FIsFirstRun:=not ReadBool('Main','FirstRunOk',False) ;
+    UserNoSound:=ReadBool('Main','NoSound',False) ;
     Free ;
   end;
 end;
@@ -36,20 +37,21 @@ begin
   if Result<0 then Result:=0 ;  
 end;
 
-function TPlayer.IsFirstRun: Boolean;
-begin
-  Result:=FIsFirstRun ;
-end;
-
 function TPlayer.IsLevelAval(LevelN: Integer): Boolean;
 begin
   Result:=LevelN<=IfThen(MaxLevelAval=0,1,MaxLevelAval) ;
 end;
 
-procedure TPlayer.SetRunOk;
+function TPlayer.IsSoundOn: Boolean;
 begin
+  Result:=not UserNoSound ;
+end;
+
+procedure TPlayer.SwitchSound() ;
+begin
+  UserNoSound:=not UserNoSound ;
   with TIniFile.Create(AppDataPath+'\player.ini') do begin
-    WriteBool('Main','FirstRunOk',True) ;
+    WriteBool('Main','NoSound',UserNoSound) ;
     Free ;
   end;
 end;

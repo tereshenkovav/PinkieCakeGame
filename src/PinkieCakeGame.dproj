@@ -163,7 +163,6 @@
         <DCCReference Include="Gamer.pas"/>
         <DCCReference Include="ObjModule.pas"/>
         <DCCReference Include="Player.pas"/>
-        <DCCReference Include="SoundHelper.pas"/>
         <DCCReference Include="Water.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

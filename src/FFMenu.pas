@@ -8,7 +8,7 @@ implementation
 uses
    FFGame,
    TAVHGEUtils, HGE, HGEFont, ObjModule, Classes, SysUtils, Gamer,
-   SoundHelper, CommonProc, Math ;
+   CommonProc, Math ;
 
 
 function FrameFuncMenu():Boolean ;
@@ -39,11 +39,8 @@ begin
       Exit ;
     end ;
 
-    if SRSound.IsMouseOver(mx,my) or SRNoSound.IsMouseOver(mx,my) then begin
-      UserNoSound:=not UserNoSound ;
-      SaveSoundOpt() ;
-    end;
-       
+    if SRSound.IsMouseOver(mx,my) or SRNoSound.IsMouseOver(mx,my) then PL.SwitchSound() ;
+
   end;
 
   Result:=False ;
@@ -95,7 +92,7 @@ begin
   fnt2.PrintF(400,40,HGETEXT_LEFT,Texts.Values['HISTORY'],[]);
   fnt2.PrintF(560,190,HGETEXT_CENTER,'¬€¡Œ– ”–Œ¬Õﬂ',[]);
 
-  if UserNoSound then begin
+  if not PL.IsSoundOn() then begin
     SRNoSound.bright:=IfThen(SRNoSound.IsMouseOver(mx,my),200,100) ;
     SRNoSound.RenderAt(30,30)
   end
