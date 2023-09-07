@@ -44,7 +44,7 @@ begin
   SRFinalWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_finalwin.png'));
   SRFail:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_fail.png'));
 
-  SndWin:=mHGE.Effect_Load('sounds\win.mp3') ;
+  SndWin:=mHGE.Effect_Load('sounds\win.wav') ;
 
   for i := 1 to GetCurrentLevelCount do
     SRButCmn[i]:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,

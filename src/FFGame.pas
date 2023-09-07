@@ -124,8 +124,8 @@ procedure LoadGameResources() ;
 var i,j:Integer ;
     CakeCount:Integer ;
 begin
-  SndJump:=mHGE.Effect_Load('sounds\jump.mp3') ;
-  SndGun:=mHGE.Effect_Load('sounds\gun.mp3') ;
+  SndJump:=mHGE.Effect_Load('sounds\jump.wav') ;
+  SndGun:=mHGE.Effect_Load('sounds\gun.wav') ;
   SndSpring:=mHGE.Effect_Load('sounds\spring.wav') ;
 
   CakeCount:=0 ;
