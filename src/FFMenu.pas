@@ -10,6 +10,17 @@ uses
    TAVHGEUtils, HGE, HGEFont, ObjModule, Classes, SysUtils, Gamer,
    CommonProc, Math ;
 
+const
+  LEVEL_BY_ROW=3 ;
+function PosLeft(i:Integer):Integer ;
+begin
+  Result:=450+((i-1) mod LEVEL_BY_ROW)*110 ;
+end ;
+
+function PosTop(i:Integer):Integer ;
+begin
+  Result:=250+((i-1) div LEVEL_BY_ROW)*50 ;
+end ;
 
 function FrameFuncMenu():Boolean ;
 var mx,my:Single ;
@@ -27,12 +38,15 @@ begin
 
   if mHGE.Input_KeyDown(HGEK_LBUTTON) then begin
     for i := 1 to GetCurrentLevelCount() do
-      if PL.IsLevelAval(i) then
-        if SRButCmn[i].IsMouseOver(mx,my) then begin
+      if PL.IsLevelAval(i) then begin
+        SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
+        if SRButBack.IsMouseOver(mx,my) then begin
           GoAutoGame(i) ;
           Exit ;
         end ;
+      end;
 
+    SRButBack.setXY(200,550) ;
     if SRButBack.IsMouseOver(mx,my) then begin
       UnloadGameResourcesCommon() ;
       Result:=True ;
@@ -49,19 +63,6 @@ end;
 function RenderFuncMenu():Boolean ;
 var mx,my:Single ;
     i:Integer ;
-const
-  LEVEL_BY_ROW=3 ;
-
-function PosLeft(i:Integer):Integer ;
-begin
-  Result:=450+((i-1) mod LEVEL_BY_ROW)*110 ;
-end ;
-
-function PosTop(i:Integer):Integer ;
-begin
-  Result:=250+((i-1) div LEVEL_BY_ROW)*50 ;
-end ;
-
 begin
   mHGE.Input_GetMousePos(mx,my);
 
@@ -76,14 +77,15 @@ begin
   fnt2.SetColor($FFFFFFFF) ;
   for i := 1 to GetCurrentLevelCount() do
     if PL.IsLevelAval(i) then begin
-      SRButCmn[i].bright:=IfThen(SRButCmn[i].IsMouseOver(mx,my),200,100) ;
-      SRButCmn[i].RenderAt(PosLeft(i),PosTop(i)) ;
+      SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
+      SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),200,100) ;
+      SRButBack.Render() ;
       fnt2.PrintF(PosLeft(i),PosTop(i)-10,HGETEXT_CENTER,'Карта %d',[i]);
     end;
 
+  SRButBack.setXY(200,550) ;
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),200,100) ;
-  SRButBack.scalex:=150 ;
-  SRButBack.RenderAt(200,550) ;
+  SRButBack.Render() ;
   fnt2.PrintF(200,550-10,HGETEXT_CENTER,'Выход',[]);
 
   sprMouse.Render(mx,my) ;

@@ -46,10 +46,6 @@ begin
 
   SndWin:=mHGE.Effect_Load('sounds\win.wav') ;
 
-  for i := 1 to GetCurrentLevelCount do
-    SRButCmn[i]:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
-      'butcmn_pinki.png'));
-
   SRButBack:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
       'butcmn_pinki.png'));
 
@@ -78,9 +74,6 @@ begin
   SRFail.Free ;
   SRFinalWin.Free ;
   SRButBack.Free ;
-  for i := 1 to GetCurrentLevelCount do
-    SRButCmn[i].Free ;
-//  SndWin.Free ;
   SRButMenu.Free ;
   SRButReplay.Free ;
   SRButNext.Free ;
