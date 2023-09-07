@@ -200,12 +200,8 @@ begin
     Exit ;
   end ;
 
-  if mHGE.Input_KeyDown(HGEK_LEFT) then begin
-    G.JumpLeft ;
-  end;
-  if mHGE.Input_KeyDown(HGEK_RIGHT) then begin
-    G.JumpRight ;
-  end;
+  if mHGE.Input_KeyDown(HGEK_LEFT) or mHGE.Input_KeyDown(HGEK_A) then G.JumpLeft ;
+  if mHGE.Input_KeyDown(HGEK_RIGHT) or mHGE.Input_KeyDown(HGEK_D) then G.JumpRight ;
 
   G.Update(dt);
   Wt.Update(dt);
