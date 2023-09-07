@@ -49,13 +49,6 @@ begin
   SRButBack:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
       'butcmn_pinki.png'));
 
-  SRButMenu:=TSpriteRender.Create(LoadSizedSprite(mHGE,
-    'butmenu_pinki.png'));
-  SRButReplay:=TSpriteRender.Create(LoadSizedSprite(mHGE,
-    'butreplay_pinki.png'));
-  SRButNext:=TSpriteRender.Create(LoadSizedSprite(mHGE,
-    'butnext_pinki.png'));
-
   SRDiscordHelper:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
     'discord_helper.png')) ;
     
@@ -67,16 +60,12 @@ begin
 end ;
 
 procedure UnLoadGameResourcesCommon() ;
-var i:Integer ;
 begin
   SRStart.Free ;
   SRWin.Free ;
   SRFail.Free ;
   SRFinalWin.Free ;
   SRButBack.Free ;
-  SRButMenu.Free ;
-  SRButReplay.Free ;
-  SRButNext.Free ;
   SRDiscordHelper.Free ;
 end;
 

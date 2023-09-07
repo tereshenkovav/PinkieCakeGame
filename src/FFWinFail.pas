@@ -12,6 +12,14 @@ uses ObjModule, TAVHGEUtils, HGE, HGEFont, FFMenu, FFGame, Math,
 type
   TWinFailMode = (mWin,mFail) ;
 
+var tekmode:TWinFailMode ;
+
+const
+  BUT_Y = 500 ;
+  BUT_REPLAY_X = 252 ;
+  BUT_MENU_X = 402 ;
+  BUT_NEXT_X = 552 ;
+
 function FrameFuncWinOrFail():Boolean ;
 var mx,my:Single ;
 begin
@@ -25,16 +33,20 @@ begin
   end ;
 
   if mHGE.Input_KeyDown(HGEK_LBUTTON) then begin
-    if SRButMenu.IsMouseOver(mx,my) then GoMenu() ;
-    if SRButReplay.IsMouseOver(mx,my) then
+    SRButBack.SetXY(BUT_MENU_X,BUT_Y) ;
+    if SRButBack.IsMouseOver(mx,my) then GoMenu() ;
+    SRButBack.SetXY(BUT_REPLAY_X,BUT_Y) ;
+    if SRButBack.IsMouseOver(mx,my) then
       GoAutoGame(ActiveLevel) ;
-    if SRButNext.IsMouseOver(mx,my) and (SRButNext.transp<100) then
-      GoAutoGame(ActiveLevel+1) ;
+    SRButBack.SetXY(BUT_NEXT_X,BUT_Y) ;
+    if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then
+      if SRButBack.IsMouseOver(mx,my) then
+        GoAutoGame(ActiveLevel+1) ;
   end;
 
 end ;
 
-function intRenderFunc(Mode:TWinFailMode):Boolean ;
+function RenderFuncWinOrFail():Boolean ;
 var mx,my:Single ;
     str:string ;
 begin
@@ -45,7 +57,7 @@ begin
 
   sprBack.Render(0,0) ;
 
-  if Mode=mWin then begin
+  if tekmode=mWin then begin
     if ActiveLevel<GetCurrentLevelCount then
       SRWin.RenderAt(300,250)
     else
@@ -53,21 +65,29 @@ begin
   end
   else SRFail.RenderAt(300,250) ;
 
-  SRButMenu.bright:=IfThen(SRButMenu.IsMouseOver(mx,my),200,100) ;
-  SRButMenu.RenderAt(350,500) ;
+  fnt2.SetColor($FFFFFFFF) ;
 
-  SRButNext.bright:=IfThen(SRButNext.IsMouseOver(mx,my),200,100) ;
-  SRButNext.transp:=IfThen(
-    (Mode=mWin)and(ActiveLevel<GetCurrentLevelCount),0,100) ;
-  SRButNext.RenderAt(500,500) ;
+  SRButBack.SetXY(BUT_MENU_X,BUT_Y) ;
+  SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
+  SRButBack.Render() ;
+  fnt2.PrintF(BUT_MENU_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_MENU'],[]);
 
-  SRButReplay.bright:=IfThen(SRButReplay.IsMouseOver(mx,my),200,100) ;
-  SRButReplay.RenderAt(200,500) ;
+  if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then begin
+    SRButBack.SetXY(BUT_NEXT_X,BUT_Y) ;
+    SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
+    SRButBack.Render() ;
+    fnt2.PrintF(BUT_NEXT_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_NEXT'],[]);
+  end;
+
+  SRButBack.SetXY(BUT_REPLAY_X,BUT_Y) ;
+  SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
+  SRButBack.Render() ;
+  fnt2.PrintF(BUT_REPLAY_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_REPLAY'],[]);
 
   sprMouse.Render(mx,my) ;
 
   fnt2.SetColor($FF404040);
-  if Mode=mWin then begin
+  if tekmode=mWin then begin
     if ActiveLevel<GetCurrentLevelCount then
       str:=Texts.Values['WINTEXT']
     else
@@ -81,24 +101,16 @@ begin
   mHGE.Gfx_EndScene;
 end;
 
-function RenderFuncWin():Boolean ;
-begin
-  intRenderFunc(mWin) ;
-end;
-
 procedure GoWin() ;
 begin
-  setFuncsNoRun(mHGE,FrameFuncWinOrFail,RenderFuncWin);
-end;
-
-function RenderFuncFail():Boolean ;
-begin
-  intRenderFunc(mFail) ;
+  tekmode:=mWin ;
+  setFuncsNoRun(mHGE,FrameFuncWinOrFail,RenderFuncWinOrFail);
 end;
 
 procedure GoFail() ;
 begin
-  setFuncsNoRun(mHGE,FrameFuncWinOrFail,RenderFuncFail);
+  tekmode:=mFail ;
+  setFuncsNoRun(mHGE,FrameFuncWinOrFail,RenderFuncWinOrFail);
 end;
 
 end.

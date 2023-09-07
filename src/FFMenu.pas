@@ -78,28 +78,28 @@ begin
   for i := 1 to GetCurrentLevelCount() do
     if PL.IsLevelAval(i) then begin
       SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
-      SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),200,100) ;
+      SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
       SRButBack.Render() ;
-      fnt2.PrintF(PosLeft(i),PosTop(i)-10,HGETEXT_CENTER,' ‡Ú‡ %d',[i]);
+      fnt2.PrintF(PosLeft(i),PosTop(i)-10,HGETEXT_CENTER,Texts.Values['LEVEL_N'],[i]);
     end;
 
   SRButBack.setXY(200,550) ;
-  SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),200,100) ;
+  SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
   SRButBack.Render() ;
-  fnt2.PrintF(200,550-10,HGETEXT_CENTER,'¬˚ıÓ‰',[]);
+  fnt2.PrintF(200,550-10,HGETEXT_CENTER,Texts.Values['BUT_EXIT'],[]);
 
   sprMouse.Render(mx,my) ;
 
   fnt2.SetColor($FF404040);
   fnt2.PrintF(400,40,HGETEXT_LEFT,Texts.Values['HISTORY'],[]);
-  fnt2.PrintF(560,190,HGETEXT_CENTER,'¬€¡Œ– ”–Œ¬Õﬂ',[]);
+  fnt2.PrintF(560,190,HGETEXT_CENTER,Texts.Values['LEVELSELECT'],[]);
 
   if not PL.IsSoundOn() then begin
-    SRNoSound.bright:=IfThen(SRNoSound.IsMouseOver(mx,my),200,100) ;
+    SRNoSound.bright:=IfThen(SRNoSound.IsMouseOver(mx,my),140,100) ;
     SRNoSound.RenderAt(30,30)
   end
   else begin
-    SRSound.bright:=IfThen(SRSound.IsMouseOver(mx,my),200,100) ;
+    SRSound.bright:=IfThen(SRSound.IsMouseOver(mx,my),140,100) ;
     SRSound.RenderAt(30,30);
   end ;
 

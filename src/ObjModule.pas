@@ -14,7 +14,6 @@ var
 
    SRStart:TSpriteRender ;
    SRWin,SRFail,SRFinalWin:TSpriteRender ;
-   SRButMenu,SRButReplay,SRButNext:TSpriteRender ;
    SRButBack:TSpriteRender ;
    SRDiscordHelper:TSpriteRender ;
    SndJump,SndGun,SndSpring,SndWin:IEffect ;
