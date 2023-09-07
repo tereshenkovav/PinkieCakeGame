@@ -18,7 +18,8 @@ uses
   Gamer in 'Gamer.pas',
   ObjModule in 'ObjModule.pas',
   Player in 'Player.pas',
-  Water in 'Water.pas';
+  Water in 'Water.pas',
+  FFAbout in 'FFAbout.pas';
 
 var i,j:Integer ;
 begin
@@ -35,7 +36,6 @@ begin
   SetPathForLoader('images\') ;
 
   mHGE.System_SetState(HGE_USESOUND,True) ;
-  mHGE.System_SetState(HGE_TITLE,'PGame');
 
   mHGE.System_SetState(HGE_WINDOWED,not SWindowOptions.FullScreen);
   mHGE.System_SetState(HGE_SCREENWIDTH,SWindowOptions.Width);
@@ -58,6 +58,8 @@ begin
     Texts.LoadFromFile('text\texts');
     for i := 0 to Texts.Count - 1 do
       Texts.ValueFromIndex[i]:=StringReplace(Texts.ValueFromIndex[i],'\n',#13,[rfReplaceAll]) ;
+
+    mHGE.System_SetState(HGE_TITLE,Texts.Values['GAME_TITLE']);
 
     // Common player
     PL:=TPlayer.CreateFromDefaultFile() ;

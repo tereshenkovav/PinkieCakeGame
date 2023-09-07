@@ -6,12 +6,16 @@ procedure GoMenu() ;
 
 implementation
 uses
-   FFGame,
+   FFGame,FFAbout,
    TAVHGEUtils, HGE, HGEFont, ObjModule, Classes, SysUtils, Gamer,
    CommonProc, Math ;
 
 const
   LEVEL_BY_ROW=3 ;
+  BUT_Y = 550 ;
+  BUT_EXIT_X = 120 ;
+  BUT_ABOUT_X = 280 ;
+
 function PosLeft(i:Integer):Integer ;
 begin
   Result:=450+((i-1) mod LEVEL_BY_ROW)*110 ;
@@ -46,10 +50,16 @@ begin
         end ;
       end;
 
-    SRButBack.setXY(200,550) ;
+    SRButBack.setXY(BUT_EXIT_X,BUT_Y) ;
     if SRButBack.IsMouseOver(mx,my) then begin
       UnloadGameResourcesCommon() ;
       Result:=True ;
+      Exit ;
+    end ;
+
+    SRButBack.setXY(BUT_ABOUT_X,BUT_Y) ;
+    if SRButBack.IsMouseOver(mx,my) then begin
+      GoAbout() ;
       Exit ;
     end ;
 
@@ -83,10 +93,15 @@ begin
       fnt2.PrintF(PosLeft(i),PosTop(i)-10,HGETEXT_CENTER,Texts.Values['LEVEL_N'],[i]);
     end;
 
-  SRButBack.setXY(200,550) ;
+  SRButBack.setXY(BUT_EXIT_X,BUT_Y) ;
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
   SRButBack.Render() ;
-  fnt2.PrintF(200,550-10,HGETEXT_CENTER,Texts.Values['BUT_EXIT'],[]);
+  fnt2.PrintF(BUT_EXIT_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_EXIT'],[]);
+
+  SRButBack.setXY(BUT_ABOUT_X,BUT_Y) ;
+  SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
+  SRButBack.Render() ;
+  fnt2.PrintF(BUT_ABOUT_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_ABOUT'],[]);
 
   sprMouse.Render(mx,my) ;
 

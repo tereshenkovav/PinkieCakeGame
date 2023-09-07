@@ -28,6 +28,8 @@ var
 
    PL:TPlayer ;
 
+   credits_str:string ;
+
 implementation
 
 end.

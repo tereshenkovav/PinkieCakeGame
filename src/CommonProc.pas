@@ -12,7 +12,7 @@ procedure PlaySound(snd:IEffect) ;
 
 implementation
 uses SysUtils, ObjModule, TAVHGEUtils, SpriteEffects,
-  FFGame ;
+  FFGame, System.JSON, IOUtils ;
 
 var R:Integer=-1 ;
 
@@ -38,6 +38,8 @@ end;
 
 procedure LoadGameResourcesCommon() ;
 var i:Integer ;
+    json:TJSonValue;
+    arr:TJsonArray ;
 begin
   SRStart:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_start.png'));
   SRWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_win.png'));
@@ -51,7 +53,12 @@ begin
 
   SRDiscordHelper:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,
     'discord_helper.png')) ;
-    
+
+  credits_str:='' ;
+  json := TJSONObject.ParseJSONValue(TFile.ReadAllText('text\credits.json'));
+  arr:=json as TJsonArray ;
+  for i:=0 to arr.Count-1 do
+    credits_str:=credits_str+UTF8ToAnsi(arr.Items[i].Value)+#13 ;
 end ;
 
 procedure PlaySound(snd:IEffect) ;
