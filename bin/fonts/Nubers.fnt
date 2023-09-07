@@ -1,6 +1,6 @@
 [HGEFONT]
 
-Bitmap=Nubers.png
+Bitmap=fonts\Nubers.png
 
 Char=" ",1,1,3,23,-1,8
 Char="!",5,1,5,23,1,1

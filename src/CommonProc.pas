@@ -31,7 +31,7 @@ function GetLevelCountByGame():Integer ;
 begin
   if R=-1 then begin
     R:=0 ;
-    while FileExists(Format('pinki_level%d',[R+1])) do Inc(R) ;
+    while FileExists(Format('levels\pinki_level%d',[R+1])) do Inc(R) ;
   end ;
   Result:=R ;
 end;
@@ -44,7 +44,7 @@ begin
   SRFinalWin:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_finalwin.png'));
   SRFail:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_fail.png'));
 
-  SndWin:=mHGE.Effect_Load('win.mp3') ;
+  SndWin:=mHGE.Effect_Load('sounds\win.mp3') ;
 
   for i := 1 to GetCurrentLevelCount do
     SRButCmn[i]:=TSpriteRender.Create(LoadAndCenteredSizedSprite(mHGE,

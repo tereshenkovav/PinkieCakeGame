@@ -22,7 +22,7 @@ var
 
    SRSound,SRNoSound:TSpriteRender ;
 
-   fnt,fnt2:IHGEFont ;
+   fnt2:IHGEFont ;
 
    Texts:TStringList ;
 

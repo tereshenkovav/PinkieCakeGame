@@ -32,6 +32,8 @@ begin
   SetGlobalWindowOptions(SWindowOptions) ;
   SpriteEffects.SetWindowOptions(SWindowOptions) ;
 
+  SetPathForLoader('images\') ;
+
   mHGE.System_SetState(HGE_USESOUND,True) ;
   mHGE.System_SetState(HGE_TITLE,'PGame');
 
@@ -50,11 +52,10 @@ begin
     SEPool:=TSpriteEffectPool.Create ;
     SRPool:=TSpriteRenderPool.Create ;
 
-    fnt:=THGEFont.Create('fontsys.fnt');
-    fnt2:=THGEFont.Create('Nubers.fnt');
+    fnt2:=THGEFont.Create('fonts\Nubers.fnt');
 
     Texts:=TStringList.Create ;
-    Texts.LoadFromFile('texts');
+    Texts.LoadFromFile('text\texts');
     for i := 0 to Texts.Count - 1 do
       Texts.ValueFromIndex[i]:=StringReplace(Texts.ValueFromIndex[i],'\n',#13,[rfReplaceAll]) ;
 

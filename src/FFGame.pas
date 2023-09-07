@@ -51,7 +51,7 @@ begin
   SEPool.DelAllEffects ;
 
   List:=TStringList.Create ;
-  List.LoadFromFile(Format('pinki_level%d',[n])) ;
+  List.LoadFromFile(Format('levels\pinki_level%d',[n])) ;
 
   G:=TGamer.Create(StrToInt(List[0]),StrToInt(List[1]),BLOCKW) ;
   with TStringList.Create() do begin
@@ -124,12 +124,12 @@ procedure LoadGameResources() ;
 var i,j:Integer ;
     CakeCount:Integer ;
 begin
-  SndJump:=mHGE.Effect_Load('jump.mp3') ;
-  SndGun:=mHGE.Effect_Load('gun.mp3') ;
-  SndSpring:=mHGE.Effect_Load('spring.wav') ;
+  SndJump:=mHGE.Effect_Load('sounds\jump.mp3') ;
+  SndGun:=mHGE.Effect_Load('sounds\gun.mp3') ;
+  SndSpring:=mHGE.Effect_Load('sounds\spring.wav') ;
 
   CakeCount:=0 ;
-  while FileExists(Format('cake%d.png',[CakeCount+1])) do
+  while FileExists(Format('images\cake%d.png',[CakeCount+1])) do
     Inc(CakeCount) ;
   mHGE.System_Log('CakeCount=%d',[CakeCount]) ;
 
