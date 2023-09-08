@@ -19,7 +19,7 @@ type
     procedure InvertVY() ;
     procedure JumpLeft() ;
     procedure JumpRight() ;
-    procedure Stop() ;
+    procedure StopAndFix(newx:Single) ;
     procedure SuperJump() ;
     procedure RocketFlight(FromX,FromY:Integer; Dir:Integer) ;
     function IsIntersectVert(Ay:Integer; dt:Single):Boolean ;
@@ -62,9 +62,10 @@ begin
   Result:=Round(Y) ;
 end;
 
-procedure TGamer.Stop();
+procedure TGamer.StopAndFix(newx:Single);
 begin
   VX:=0 ;
+  x:=newx ;
 end;
 
 procedure TGamer.InvertVY;

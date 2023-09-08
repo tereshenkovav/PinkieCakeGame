@@ -219,13 +219,8 @@ begin
 
       if G.IsIntersectVert(GetBlockTop(j)-BLOCKH,dt) then
 
-        if ((G.GetX>GetBlockLeft(i))and(G.GetX<=GetBlockLeft(i)+BLOCKW)) or
-           ((G.GetX+BLOCKW>GetBlockLeft(i))and(G.GetX+BLOCKW<=GetBlockLeft(i)+BLOCKW)) then begin
+        if Abs(G.GetX()-GetBlockLeft(i))<BLOCKW then begin
           if PointGet.X=-1 then begin
-            PointGet.X:=i ; PointGet.Y:=j ;
-          end
-          else
-          if PointGet.Y<j then begin
             PointGet.X:=i ; PointGet.Y:=j ;
           end
           else begin
@@ -280,8 +275,8 @@ begin
   end;
 
 
-  if G.IsIntersectLeft(LEFT_SPACE,dt) then G.Stop() ;
-  if G.IsIntersectRight(LEFT_SPACE+BLOCKW*BLOCKNX,dt) then G.Stop() ;
+  if G.IsIntersectLeft(LEFT_SPACE,dt) then G.StopAndFix(LEFT_SPACE) ;
+  if G.IsIntersectRight(LEFT_SPACE+BLOCKW*BLOCKNX,dt) then G.StopAndFix(LEFT_SPACE+BLOCKW*(BLOCKNX-1)) ;
 
   // Отскок от стены вправо
   for i := 0 to BLOCKNX - 1 - 1 do begin
@@ -290,7 +285,7 @@ begin
         if G.IsIntersectLeft(GetBlockLeft(i)+BLOCKW,dt) then
           if ((G.GetY>GetBlockTop(j))and(G.GetY<=GetBlockTop(j)+BLOCKH)) or
              ((G.GetY+BLOCKH>GetBlockTop(j))and(G.GetY+BLOCKH<=GetBlockTop(j)+BLOCKH)) then begin
-             G.Stop() ;
+             G.StopAndFix(GetBlockLeft(i)+BLOCKW) ;
              GoTo Fin1 ;
              end;
   end;
@@ -304,7 +299,7 @@ Fin1:
         if G.IsIntersectRight(GetBlockLeft(i),dt) then
           if ((G.GetY>GetBlockTop(j))and(G.GetY<=GetBlockTop(j)+BLOCKH)) or
              ((G.GetY+BLOCKH>GetBlockTop(j))and(G.GetY+BLOCKH<=GetBlockTop(j)+BLOCKH)) then begin
-             G.Stop() ;
+             G.StopAndFix(GetBlockLeft(i)-BLOCKW) ;
              Goto fin ;
              end;
   end;
