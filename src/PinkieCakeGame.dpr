@@ -43,6 +43,7 @@ begin
   mHGE.System_SetState(HGE_SCREENWIDTH,SWindowOptions.Width);
   mHGE.System_SetState(HGE_SCREENHEIGHT,SWindowOptions.Height);
   mHGE.System_SetState(HGE_SCREENBPP,32);
+  mHGE.System_SetState(HGE_FPS,HGEFPS_VSYNC);
   mHGE.System_SetState(HGE_ICON,'MAINICON');
 
   if not mHGE.System_Initiate() then begin
