@@ -9,10 +9,8 @@ type
     Y:Single ;
     VX:Single ;
     VY:Single ;
-    oldY:Single ;
-    oldX:Single ;
     W:Integer ;
-    LastNotNolVX:Single ;
+    viewright:Boolean ;
   public
     function GetX():Integer ;
     function GetY():Integer ;
@@ -21,12 +19,12 @@ type
     procedure InvertVY() ;
     procedure JumpLeft() ;
     procedure JumpRight() ;
-    procedure InvertVX() ;
+    procedure Stop() ;
     procedure SuperJump() ;
     procedure RocketFlight(FromX,FromY:Integer; Dir:Integer) ;
-    function IsIntersectVert(Ay:Integer):Boolean ;
-    function IsIntersectLeft(Ax:Integer):Boolean ;
-    function IsIntersectRight(Ax:Integer):Boolean ;
+    function IsIntersectVert(Ay:Integer; dt:Single):Boolean ;
+    function IsIntersectLeft(Ax:Integer; dt:Single):Boolean ;
+    function IsIntersectRight(Ax:Integer; dt:Single):Boolean ;
     function IsMovingDown():Boolean ;
     function IsViewRight():Boolean ;
     function GetDistFromXCenter(AX:Integer):Integer ;
@@ -45,9 +43,8 @@ begin
   y:=AY ;
   VX:=0 ;
   VY:=0 ;
-  oldY:=y ;
-  oldX:=x ;
   W:=AW ;
+  viewright:=True ;
 end;
 
 function TGamer.GetDistFromXCenter(AX:Integer): Integer;
@@ -65,9 +62,9 @@ begin
   Result:=Round(Y) ;
 end;
 
-procedure TGamer.InvertVX;
+procedure TGamer.Stop();
 begin
-  VX:=-VX ;
+  VX:=0 ;
 end;
 
 procedure TGamer.InvertVY;
@@ -75,19 +72,19 @@ begin
   VY:=-400 ;
 end;
 
-function TGamer.IsIntersectLeft(Ax: Integer): Boolean;
+function TGamer.IsIntersectLeft(Ax: Integer; dt:Single): Boolean;
 begin
-  Result:=((x-Ax)*(oldX-Ax)<=0) ;
+  Result:=(Ax<=x)and(x+VX*dt<=Ax)and(VX<0) ;
 end;
 
-function TGamer.IsIntersectRight(Ax: Integer): Boolean;
+function TGamer.IsIntersectRight(Ax: Integer; dt:Single): Boolean;
 begin
-  Result:=((x+W-Ax)*(oldX+W-Ax)<=0) ;
+  Result:=(x+W<=Ax)and(x+W+VX*dt>=Ax)and(VX>0) ;
 end;
 
-function TGamer.IsIntersectVert(Ay: Integer): Boolean;
+function TGamer.IsIntersectVert(Ay: Integer; dt:Single): Boolean;
 begin
-  Result:=((y-Ay)*(oldY-Ay)<=0) ;
+  Result:=(y<=Ay)and(y+VY*dt>=Ay)and(VY>0) ;
 end;
 
 function TGamer.IsMovingDown: Boolean;
@@ -97,17 +94,19 @@ end;
 
 function TGamer.IsViewRight: Boolean;
 begin
-  if VX=0 then Result:=LastNotNolVX>0 else Result:=VX>0 ;
+  Result:=viewright ;
 end;
 
 procedure TGamer.JumpLeft;
 begin
   VX:=-MAX_JUMP_VEL ;
+  viewright:=false ;
 end;
 
 procedure TGamer.JumpRight;
 begin
   VX:=MAX_JUMP_VEL ;
+  viewright:=true ;
 end;
 
 procedure TGamer.RocketFlight(FromX, FromY, Dir: Integer);
@@ -115,6 +114,7 @@ begin
   X:=FromX ;
   Y:=FromY ;
   VX:=Dir*900 ;
+  viewright:=dir>0 ;
   VY:=-200 ;
 end;
 
@@ -126,17 +126,11 @@ end;
 procedure TGamer.Update(dt: Single);
 var K:Single ;
 begin
-  oldY:=y ;
-  oldX:=x ;
-
   X:=X+VX*dt ;
   Y:=Y+VY*dt ;
   VY:=VY+G*dt ;
   VX:=VX-VX*dt ;
   if ABS(VX)<100 then VX:=0 ;
-
-  if VX<>0 then LastNotNolVX:=VX ;
-  
 end;
 
 end.

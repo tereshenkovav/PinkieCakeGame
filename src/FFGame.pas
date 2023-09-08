@@ -205,9 +205,6 @@ begin
   if mHGE.Input_KeyDown(HGEK_LEFT) or mHGE.Input_KeyDown(HGEK_A) then G.JumpLeft ;
   if mHGE.Input_KeyDown(HGEK_RIGHT) or mHGE.Input_KeyDown(HGEK_D) then G.JumpRight ;
 
-  G.Update(dt);
-  Wt.Update(dt);
-
   if G.IsMovingDown then begin
 
   // Расчет столкновения и съедания блока
@@ -220,7 +217,7 @@ begin
     for j := BLOCKNY - 1 downto 0 do
       if arr_places[i,j]<>pSpace then begin
 
-      if G.IsIntersectVert(GetBlockTop(j)-BLOCKH) then
+      if G.IsIntersectVert(GetBlockTop(j)-BLOCKH,dt) then
 
         if ((G.GetX>GetBlockLeft(i))and(G.GetX<=GetBlockLeft(i)+BLOCKW)) or
            ((G.GetX+BLOCKW>GetBlockLeft(i))and(G.GetX+BLOCKW<=GetBlockLeft(i)+BLOCKW)) then begin
@@ -283,18 +280,17 @@ begin
   end;
 
 
-  if G.GetX<=LEFT_SPACE then G.InvertVX ;
-  if G.GetX>=LEFT_SPACE+BLOCKW*(BLOCKNX-1) then G.InvertVX ;
-
+  if G.IsIntersectLeft(LEFT_SPACE,dt) then G.Stop() ;
+  if G.IsIntersectRight(LEFT_SPACE+BLOCKW*BLOCKNX,dt) then G.Stop() ;
 
   // Отскок от стены вправо
   for i := 0 to BLOCKNX - 1 - 1 do begin
     for j := 0 to BLOCKNY - 1 do
       if arr_places[i,j]<>pSpace then
-        if G.IsIntersectLeft(GetBlockLeft(i)+BLOCKW) then
+        if G.IsIntersectLeft(GetBlockLeft(i)+BLOCKW,dt) then
           if ((G.GetY>GetBlockTop(j))and(G.GetY<=GetBlockTop(j)+BLOCKH)) or
              ((G.GetY+BLOCKH>GetBlockTop(j))and(G.GetY+BLOCKH<=GetBlockTop(j)+BLOCKH)) then begin
-             G.JumpRight ;
+             G.Stop() ;
              GoTo Fin1 ;
              end;
   end;
@@ -305,10 +301,10 @@ Fin1:
   for i := 0+1 to BLOCKNX - 1 do begin
     for j := 0 to BLOCKNY - 1 do
       if arr_places[i,j]<>pSpace then
-        if G.IsIntersectRight(GetBlockLeft(i)) then
+        if G.IsIntersectRight(GetBlockLeft(i),dt) then
           if ((G.GetY>GetBlockTop(j))and(G.GetY<=GetBlockTop(j)+BLOCKH)) or
              ((G.GetY+BLOCKH>GetBlockTop(j))and(G.GetY+BLOCKH<=GetBlockTop(j)+BLOCKH)) then begin
-             G.JumpLeft ;
+             G.Stop() ;
              Goto fin ;
              end;
   end;
@@ -329,6 +325,9 @@ Fin1:
     UnloadGameResources() ;
     GoFail() ;
   end;
+
+  G.Update(dt);
+  Wt.Update(dt);
 
   Result:=False ;
 end;
