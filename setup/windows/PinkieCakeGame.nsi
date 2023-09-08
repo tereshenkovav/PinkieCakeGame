@@ -4,7 +4,7 @@
 
 Unicode True
 RequestExecutionLevel admin
-SetCompressor /SOLID zlib
+SetCompressor /SOLID lzma
 AutoCloseWindow true
 Icon ..\..\graphics\main.ico
 XPStyle on
