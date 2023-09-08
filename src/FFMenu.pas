@@ -41,6 +41,7 @@ begin
   end ;
 
   if mHGE.Input_KeyDown(HGEK_LBUTTON) then begin
+    SRButBack.scalex:=110 ;
     for i := 1 to GetCurrentLevelCount() do
       if PL.IsLevelAval(i) then begin
         SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
@@ -49,6 +50,7 @@ begin
           Exit ;
         end ;
       end;
+    SRButBack.scalex:=100 ;
 
     SRButBack.setXY(BUT_EXIT_X,BUT_Y) ;
     if SRButBack.IsMouseOver(mx,my) then begin
@@ -84,6 +86,7 @@ begin
   SRStart.RenderAt(70,300);
 
   fnt2.SetColor($FFFFFFFF) ;
+  SRButBack.scalex:=110 ;
   for i := 1 to GetCurrentLevelCount() do
     if PL.IsLevelAval(i) then begin
       SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
@@ -91,6 +94,7 @@ begin
       SRButBack.Render() ;
       fnt2.PrintF(PosLeft(i),PosTop(i)-10,HGETEXT_CENTER,Texts.Values['LEVEL_N'],[i]);
     end;
+  SRButBack.scalex:=100 ;
 
   SRButBack.setXY(BUT_EXIT_X,BUT_Y) ;
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;

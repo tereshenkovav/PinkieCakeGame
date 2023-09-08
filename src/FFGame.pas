@@ -351,9 +351,9 @@ begin
 
   if G.IsViewRight then SRGamer.mirror:=[mirrHorz] else SRGamer.mirror:=[] ;
   
-  fnt2.PrintF(SWindowOptions.GetXCenter,15,HGETEXT_CENTER,'Карта %d',[ActiveLevel]);
+  fnt2.PrintF(SWindowOptions.GetXCenter,15,HGETEXT_CENTER,Texts.Values['LEVEL_N'],[ActiveLevel]);
   if Trim(LevelText)<>'' then begin
-    fnt2.PrintF(100,40,HGETEXT_LEFT,'Советы Дискорда',[]);
+    fnt2.PrintF(100,40,HGETEXT_LEFT,Texts.Values['DISCORD_ADVICE'],[]);
     fnt2.PrintF(100,60,HGETEXT_LEFT,LevelText,[]);
     SRDiscordHelper.RenderAt(50,50);
   end; 
