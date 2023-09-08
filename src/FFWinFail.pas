@@ -51,6 +51,8 @@ function RenderFuncWinOrFail():Boolean ;
 var mx,my:Single ;
     str:string ;
 begin
+  Result:=False ;
+
   mHGE.Input_GetMousePos(mx,my);
 
   mHGE.Gfx_BeginScene;
@@ -88,8 +90,6 @@ begin
 
   SRButBack.scalex:=100 ;
 
-  sprMouse.Render(mx,my) ;
-
   fnt2.SetColor($FF404040);
   if tekmode=mWin then begin
     if ActiveLevel<GetCurrentLevelCount then
@@ -101,6 +101,8 @@ begin
     str:=Texts.Values['FAILTEXT'] ;
 
   fnt2.PrintF(SWindowOptions.GetXCenter(),100,HGETEXT_CENTER,str,[]) ;
+
+  sprMouse.Render(mx,my) ;
 
   mHGE.Gfx_EndScene;
 end;

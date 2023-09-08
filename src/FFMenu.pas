@@ -76,6 +76,8 @@ function RenderFuncMenu():Boolean ;
 var mx,my:Single ;
     i:Integer ;
 begin
+  Result:=False ;
+
   mHGE.Input_GetMousePos(mx,my);
 
   mHGE.Gfx_BeginScene;

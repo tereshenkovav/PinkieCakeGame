@@ -32,6 +32,8 @@ function RenderFuncAbout():Boolean ;
 var mx,my:Single ;
     str:string ;
 begin
+  Result:=False ;
+
   mHGE.Input_GetMousePos(mx,my);
 
   mHGE.Gfx_BeginScene;
@@ -45,14 +47,14 @@ begin
   SRButBack.Render() ;
   fnt2.PrintF(BUT_X,BUT_Y-10,HGETEXT_CENTER,'OK',[]);
 
-  sprMouse.Render(mx,my) ;
-
   fnt2.SetColor($FF404040);
   fnt2.PrintF(SWindowOptions.GetXCenter(),60,HGETEXT_CENTER,AnsiUpperCase(Texts.Values['GAME_TITLE']),[]) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),80,HGETEXT_CENTER,Texts.Values['VERSION'],[]) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),130,HGETEXT_CENTER,Texts.Values['ABOUTTEXT'],[]) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),240,HGETEXT_CENTER,AnsiUpperCase(Texts.Values['CREDITS']),[]) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),290,HGETEXT_CENTER,credits_str,[]) ;
+
+  sprMouse.Render(mx,my) ;
 
   mHGE.Gfx_EndScene;
 end;
