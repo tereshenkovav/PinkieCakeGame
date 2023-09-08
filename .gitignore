@@ -67,3 +67,7 @@ __recovery/
 *.log
 player.ini
 sound.ini
+
+bin/text/deflang
+setup/windows/*.zip
+setup/windows/*.exe
