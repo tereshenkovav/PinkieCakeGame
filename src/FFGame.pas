@@ -28,6 +28,7 @@ var
    sprWall:IHGESprite ;
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
+   sprBorder:IHGESprite ;
    arr_blocks:array[0..31,0..31] of TSpriteRender ;
    arr_places:array[0..31,0..31] of TPlace ;
 
@@ -139,6 +140,7 @@ begin
   sprWall:=LoadSizedSprite(mHGE,'wall.png') ;
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
   sprGun:=LoadSizedSprite(mHGE,'gun.png') ;
+  sprBorder:=LoadSizedSprite(mHGE,'border.png') ;
 
   Randomize ;
   for i := 0 to BLOCKNX - 1 do
@@ -333,7 +335,7 @@ end;
 
 function RenderFuncGame():Boolean ;
 var mx,my:Single ;
-    i:Integer ;
+    i,j:Integer ;
     color:LongWord ;
     b:Byte ;
 begin
@@ -347,6 +349,11 @@ begin
   sprBack.Render(0,0) ;
 
   SRPool.Render ;
+
+  for i := 0 to BLOCKNX - 1 do
+    for j := 0 to BLOCKNY - 1 do
+      if arr_places[i,j]=pCake then
+        sprBorder.Render(GetBlockLeft(i),GetBlockTop(j)) ;
 
   if G.IsViewRight then SRGamer.mirror:=[mirrHorz] else SRGamer.mirror:=[] ;
   
