@@ -70,7 +70,7 @@ begin
     Free ;
   end;
 
-  LevelText:=Trim(List[3]) ;
+  LevelText:=Texts.Values[Trim(List[3])] ;
 
   List.Delete(0) ; List.Delete(0) ; List.Delete(0) ; List.Delete(0) ;
 
