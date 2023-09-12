@@ -58,10 +58,21 @@ begin
 
     fnt2:=THGEFont.Create('fonts\Nubers.fnt');
 
+    langsall:=TStringList.Create() ;
+    langsall.LoadFromFile('text\languages') ;
+
+    setLang('ru') ;
+    if FileExists('text\deflang') then
+      with TStringList.Create() do begin
+        LoadFromFile('text\deflang') ;
+        if Count>0 then
+          setLang(Trim(Strings[0])) ;
+        Free ;
+      end;
+
+
     Texts:=TStringList.Create ;
-    Texts.LoadFromFile('text\texts');
-    for i := 0 to Texts.Count - 1 do
-      Texts.ValueFromIndex[i]:=StringReplace(Texts.ValueFromIndex[i],'\n',#13,[rfReplaceAll]) ;
+    loadTexts() ;
 
     mHGE.System_SetState(HGE_TITLE,Texts.Values['GAME_TITLE']);
 

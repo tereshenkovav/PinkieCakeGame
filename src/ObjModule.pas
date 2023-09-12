@@ -2,7 +2,7 @@ unit ObjModule;
 
 interface
 uses HGE, WindowOptions, SpriteEffects, HGESprite, Gamer, HGEFont,
-  Player, Classes ;
+  Player, Classes, Generics.Collections, Generics.Defaults ;
 
 var
   mHGE:IHGE ;
@@ -23,6 +23,9 @@ var
    fnt2:IHGEFont ;
 
    Texts:TStringList ;
+   langsall:TStringList ;
+   lang:string ;
+   icons:TDictionary<string,TSpriteRender> ;
 
    ActiveLevel:Integer ;
 

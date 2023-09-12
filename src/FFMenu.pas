@@ -28,7 +28,7 @@ end ;
 
 function FrameFuncMenu():Boolean ;
 var mx,my:Single ;
-    i:Integer ;
+    i,idx:Integer ;
 begin
   Result:=False ;
 
@@ -66,6 +66,15 @@ begin
     end ;
 
     if SRSound.IsMouseOver(mx,my) or SRNoSound.IsMouseOver(mx,my) then PL.SwitchSound() ;
+
+    if (icons[lang].IsMouseOver(mx,my)) then begin
+      idx:=langsall.IndexOf(lang) ;
+      Inc(idx) ;
+      if idx>=langsall.Count then idx:=0 ;
+      setLang(langsall[idx]) ;
+      loadTexts() ;
+      mHGE.System_SetState(HGE_TITLE,Texts.Values['GAME_TITLE']);
+    end;
 
   end;
 
@@ -120,6 +129,10 @@ begin
     SRSound.bright:=IfThen(SRSound.IsMouseOver(mx,my),140,100) ;
     SRSound.RenderAt(20,20);
   end ;
+
+  icons[lang].bright:=IfThen(icons[lang].IsMouseOver(mx,my),140,100) ;
+  icons[lang].RenderAt(130,28) ;
+  fnt2.PrintF(110,32,HGETEXT_CENTER,lang.ToUpper(),[]);
 
   sprMouse.Render(mx,my) ;
 
