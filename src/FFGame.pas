@@ -381,8 +381,6 @@ begin
     fnt2.PrintF(SWindowOptions.GetXCenter,80,HGETEXT_CENTER,Texts.Values['TEXT_PAUSE'],[]);
   end;
 
-  sprMouse.Render(mx,my) ;
-
   mHGE.Gfx_EndScene;
 
   Result:=False ;
