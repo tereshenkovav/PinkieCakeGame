@@ -34,12 +34,6 @@ begin
 
   mHGE.Input_GetMousePos(mx,my);
 
-  if mHGE.Input_KeyDown(HGEK_ESCAPE) then begin
-    UnloadGameResourcesCommon() ;
-    Result:=True ;
-    Exit ;
-  end ;
-
   if mHGE.Input_KeyDown(HGEK_LBUTTON) then begin
     SRButBack.scalex:=110 ;
     for i := 1 to GetCurrentLevelCount() do

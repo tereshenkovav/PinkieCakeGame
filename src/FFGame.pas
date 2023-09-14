@@ -29,6 +29,7 @@ var
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
    sprBorder:IHGESprite ;
+   sprPanel:IHGESprite ;
    arr_blocks:array[0..31,0..31] of TSpriteRender ;
    arr_places:array[0..31,0..31] of TPlace ;
 
@@ -37,6 +38,7 @@ var
    Wt:TWater ;
 
    LevelText:string ;
+   pause:Boolean ;
 
 
 function GetCurrentLevelCount():Integer ;
@@ -141,6 +143,7 @@ begin
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
   sprGun:=LoadSizedSprite(mHGE,'gun.png') ;
   sprBorder:=LoadSizedSprite(mHGE,'border.png') ;
+  sprPanel:=LoadAndCenteredSizedSprite(mHGE,'panel.png') ;
 
   Randomize ;
   for i := 0 to BLOCKNX - 1 do
@@ -196,11 +199,17 @@ begin
   
   dt:=mHGE.Timer_GetDelta() ;
 
-  if mHGE.Input_KeyDown(HGEK_ESCAPE) then begin
-    UnloadGameResources() ;
-    GoMenu() ;
+  if pause then begin
+    if mHGE.Input_KeyDown(HGEK_ESCAPE) then pause:=False ;
+    if mHGE.Input_KeyDown(HGEK_F10) then begin
+      UnloadGameResources() ;
+      GoMenu() ;
+      Exit ;
+    end ;
     Exit ;
-  end ;
+  end;
+
+  if mHGE.Input_KeyDown(HGEK_ESCAPE) then pause:=True ;
 
   if mHGE.Input_KeyDown(HGEK_LEFT) or mHGE.Input_KeyDown(HGEK_A) then G.JumpLeft ;
   if mHGE.Input_KeyDown(HGEK_RIGHT) or mHGE.Input_KeyDown(HGEK_D) then G.JumpRight ;
@@ -367,6 +376,11 @@ begin
     sprWater.RenderStretch(0,Wt.WaterLevel,SWindowOptions.Width,SWindowOptions.Height);
   end;
 
+  if pause then begin
+    sprPanel.Render(SWindowOptions.GetXCenter,120) ;
+    fnt2.PrintF(SWindowOptions.GetXCenter,80,HGETEXT_CENTER,Texts.Values['TEXT_PAUSE'],[]);
+  end;
+
   sprMouse.Render(mx,my) ;
 
   mHGE.Gfx_EndScene;
@@ -376,6 +390,7 @@ end;
 
 procedure GoGameLevel(Level:Integer) ;
 begin
+  pause:=False ;
   ActiveLevel:=Level ;
   LoadLevel(Level) ;
   LoadGameResources() ;

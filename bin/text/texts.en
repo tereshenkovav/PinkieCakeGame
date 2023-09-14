@@ -9,6 +9,7 @@ BUT_MENU=To menu
 BUT_NEXT=Next[Enter]
 BUT_EXIT=Exit
 BUT_ABOUT=About
+TEXT_PAUSE=PAUSE\n\nEscape - resume\nF10 - to menu
 LEVELSELECT=SELECT LEVEL
 LEVEL_N=Level %d
 GAME_TITLE=Pinkie Pie and the muffins world game

@@ -9,6 +9,7 @@ BUT_MENU=В меню
 BUT_NEXT=Далее[Enter]
 BUT_EXIT=Выход
 BUT_ABOUT=Об игре
+TEXT_PAUSE=ПАУЗА\n\nEscape - продолжить\nF10 - в меню
 LEVELSELECT=ВЫБОР УРОВНЯ
 LEVEL_N=Уровень %d
 GAME_TITLE=Игра Пинки Пай и мир кексов
