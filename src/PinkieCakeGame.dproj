@@ -166,6 +166,7 @@
         <DCCReference Include="Player.pas"/>
         <DCCReference Include="Water.pas"/>
         <DCCReference Include="FFAbout.pas"/>
+        <DCCReference Include="FFExitMenu.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

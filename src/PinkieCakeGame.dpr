@@ -21,7 +21,8 @@ uses
   ObjModule in 'ObjModule.pas',
   Player in 'Player.pas',
   Water in 'Water.pas',
-  FFAbout in 'FFAbout.pas';
+  FFAbout in 'FFAbout.pas',
+  FFExitMenu in 'FFExitMenu.pas';
 
 var i,j:Integer ;
 begin
@@ -45,6 +46,7 @@ begin
   mHGE.System_SetState(HGE_SCREENBPP,32);
   mHGE.System_SetState(HGE_FPS,HGEFPS_VSYNC);
   mHGE.System_SetState(HGE_ICON,'MAINICON');
+  mHGE.System_SetState(HGE_EXITFUNC,procConfirmExit) ;
 
   if not mHGE.System_Initiate() then begin
     MessageBox(0,PChar(mHGE.System_GetErrorMessage),'Error',MB_OK or MB_ICONERROR or MB_SYSTEMMODAL);
