@@ -5,7 +5,7 @@ interface
 procedure GoIntro() ;
 
 implementation
-uses TAVHGEUtils, SpriteEffects, Effects, ObjModule, HGE, FFStartMenu ;
+uses TAVHGEUtils, SpriteEffects, Effects, ObjModule, HGE, FFMenu ;
 
 var SRIntro:TSpriteRender ;
     tleft:Single ;
