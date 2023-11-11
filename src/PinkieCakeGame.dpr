@@ -22,7 +22,8 @@ uses
   Player in 'Player.pas',
   Water in 'Water.pas',
   FFAbout in 'FFAbout.pas',
-  FFExitMenu in 'FFExitMenu.pas';
+  FFExitMenu in 'FFExitMenu.pas',
+  FFIntro in 'FFIntro.pas';
 
 var i,j:Integer ;
 begin
@@ -92,7 +93,7 @@ begin
   SRNoSound:=TSpriteRender.Create(LoadSizedSprite(mHGE,'sound_no.png'));
 
   LoadGameResourcesCommon() ;
-  GoMenu() ;
+  GoIntro() ;
   mHGE.System_Start ;
 
   PL.Free ;
