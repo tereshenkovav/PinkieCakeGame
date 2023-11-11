@@ -1,4 +1,4 @@
-SET VERSION=0.6.0
+SET VERSION=1.0.0
 
 "C:\Program Files (x86)\NSIS\makensis.exe" /DGAMELANG=ru /DUPPERLANG=RU /DVERSION=%VERSION% PinkieCakeGame.nsi
 "C:\Program Files (x86)\NSIS\makensis.exe" /DGAMELANG=en /DUPPERLANG=EN /DVERSION=%VERSION% PinkieCakeGame.nsi
