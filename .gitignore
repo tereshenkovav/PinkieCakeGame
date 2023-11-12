@@ -69,5 +69,6 @@ player.ini
 sound.ini
 
 bin/text/deflang
+bin/text/credits.json
 setup/windows/*.zip
 setup/windows/*.exe

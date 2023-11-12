@@ -72,10 +72,12 @@ begin
     'discord_helper.png')) ;
 
   credits_str:='' ;
-  json := TJSONObject.ParseJSONValue(TFile.ReadAllText('text\credits.json'));
-  arr:=json as TJsonArray ;
-  for i:=0 to arr.Count-1 do
-    credits_str:=credits_str+UTF8ToAnsi(arr.Items[i].Value)+#13 ;
+  if FileExists('text\credits.json') then begin
+    json := TJSONObject.ParseJSONValue(TFile.ReadAllText('text\credits.json'));
+    arr:=json as TJsonArray ;
+    for i:=0 to arr.Count-1 do
+      credits_str:=credits_str+UTF8ToAnsi(arr.Items[i].Value)+#13 ;
+  end;
 
   icons:=TDictionary<string,TSpriteRender>.Create() ;
   for s in langsall do
