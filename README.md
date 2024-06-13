@@ -48,4 +48,4 @@ A simple arcade game about the adventures of Pinkie Pie with two dozen levels
 Создание архива и дистрибутива для Windows выполняется
 после сборки проекта запуском файла `build32.bat`
 из каталога `setup/windows`.\
-В файле сборки нужно указать путь к компилятору NSIS.\
+В файле сборки нужно указать путь к компилятору NSIS.
