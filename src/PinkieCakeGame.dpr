@@ -39,9 +39,12 @@ begin
 
   SetPathForLoader('images\') ;
 
+  // Common player
+  PL:=TPlayer.CreateFromDefaultFile() ;
+
   mHGE.System_SetState(HGE_USESOUND,True) ;
 
-  mHGE.System_SetState(HGE_WINDOWED,not SWindowOptions.FullScreen);
+  mHGE.System_SetState(HGE_WINDOWED,not PL.IsFullScreen());
   mHGE.System_SetState(HGE_SCREENWIDTH,SWindowOptions.Width);
   mHGE.System_SetState(HGE_SCREENHEIGHT,SWindowOptions.Height);
   mHGE.System_SetState(HGE_SCREENBPP,32);
@@ -78,9 +81,6 @@ begin
     loadTexts() ;
 
     mHGE.System_SetState(HGE_TITLE,Texts.Values['GAME_TITLE']);
-
-    // Common player
-    PL:=TPlayer.CreateFromDefaultFile() ;
 
   // Load game
 

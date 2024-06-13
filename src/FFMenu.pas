@@ -8,13 +8,15 @@ implementation
 uses
    FFGame,FFAbout,
    TAVHGEUtils, HGE, HGEFont, ObjModule, Classes, SysUtils, Gamer,
-   CommonProc, Math ;
+   CommonProc, Math, StrUtils ;
 
 const
   LEVEL_BY_ROW=3 ;
   BUT_Y = 550 ;
   BUT_EXIT_X = 640 ;
   BUT_ABOUT_X = 500 ;
+  BUT_FULLSCR_X = 280 ;
+  BUT_FULLSCR_Y = 45 ;
 
 function PosLeft(i:Integer):Integer ;
 begin
@@ -58,6 +60,15 @@ begin
       GoAbout() ;
       Exit ;
     end ;
+
+    SRButBack.scalex:=160 ;
+    SRButBack.setXY(BUT_FULLSCR_X,BUT_FULLSCR_Y) ;
+    if SRButBack.IsMouseOver(mx,my) then begin
+      PL.SwitchFullScreen() ;
+      mHGE.System_SetState(HGE_WINDOWED,not PL.IsFullScreen());
+      Exit ;
+    end ;
+    SRButBack.scalex:=100 ;
 
     if SRSound.IsMouseOver(mx,my) or SRNoSound.IsMouseOver(mx,my) then PL.SwitchSound() ;
 
@@ -110,6 +121,14 @@ begin
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
   SRButBack.Render() ;
   fnt2.PrintF(BUT_ABOUT_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_ABOUT'],[]);
+
+  SRButBack.scalex:=160 ;
+  SRButBack.setXY(BUT_FULLSCR_X,BUT_FULLSCR_Y) ;
+  SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
+  SRButBack.Render() ;
+  fnt2.PrintF(BUT_FULLSCR_X,BUT_FULLSCR_Y-10,HGETEXT_CENTER,
+    IfThen(PL.IsFullScreen(),Texts.Values['BUT_WINDOW'],Texts.Values['BUT_FULLSCR']),[]);
+  SRButBack.scalex:=100 ;
 
   fnt2.SetColor($FF404040);
   fnt2.PrintF(40,120,HGETEXT_LEFT,Texts.Values['HISTORY'],[]);
