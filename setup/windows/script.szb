@@ -1,0 +1,11 @@
+SetCompressor LZMA
+SetCompressionLevel 9
+ZipFile PinkieCakeGame-$LANGH$-%VERSION%-Win32.zip
+
+Files ..\..\bin\*
+Dir ..\..\bin\fonts
+Dir ..\..\bin\images
+Dir ..\..\bin\levels
+Dir ..\..\bin\sounds
+Dir ..\..\bin\text
+Text $LANGL$\r\n text\deflang

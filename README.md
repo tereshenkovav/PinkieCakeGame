@@ -28,8 +28,8 @@ A simple arcade game about the adventures of Pinkie Pie with two dozen levels
 Создание дистрибутива для Windows выполняется с помощью программы
 [NSIS](https://nsis.sourceforge.io)
 
-Создание архива для Windows выполняется с помощью консольной версии архиватора
-[7-Zip](https://www.7-zip.org)
+Создание архива для Windows выполняется с помощью скриптовой утилиты построения архивов
+[SmartZipBuilder](https://github.com/tereshenkovav/SmartZipBuilder)
 
 ## Сборка, запуск игры и создание дистрибутивов
 
