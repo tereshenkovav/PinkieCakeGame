@@ -51,6 +51,7 @@ begin
   mHGE.System_SetState(HGE_FPS,HGEFPS_VSYNC);
   mHGE.System_SetState(HGE_ICON,'MAINICON');
   mHGE.System_SetState(HGE_EXITFUNC,procConfirmExit) ;
+  mHGE.System_SetState(HGE_LOGFILE,AppDataPath+'\hge.log') ;
 
   if not mHGE.System_Initiate() then begin
     MessageBox(0,PChar(mHGE.System_GetErrorMessage),'Error',MB_OK or MB_ICONERROR or MB_SYSTEMMODAL);
