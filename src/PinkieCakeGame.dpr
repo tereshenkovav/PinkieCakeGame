@@ -25,7 +25,6 @@ uses
   FFExitMenu in 'FFExitMenu.pas',
   FFIntro in 'FFIntro.pas';
 
-var i,j:Integer ;
 begin
   Randomize() ;
 
@@ -89,6 +88,7 @@ begin
   sprBack:=LoadSizedSprite(mHGE,'back.png') ;
 
   sprWater:=LoadSizedSprite(mHGE,'water.png') ;
+  sprWater.SetColor($80FFFFFF) ;
 
   SRSound:=TSpriteRender.Create(LoadSizedSprite(mHGE,'sound.png'));
   SRNoSound:=TSpriteRender.Create(LoadSizedSprite(mHGE,'sound_no.png'));

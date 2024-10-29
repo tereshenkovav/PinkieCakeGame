@@ -11,9 +11,7 @@ var SRIntro:TSpriteRender ;
     tleft:Single ;
 
 function FrameFuncIntro():Boolean ;
-var mx,my:Single ;
-    i:Integer ;
-    dt:Single ;
+var dt:Single ;
 begin
   Result:=False ;
 
@@ -33,11 +31,11 @@ begin
     GoMenu() ;
     Exit ;
   end;
-
 end ;
 
 function RenderFuncIntro():Boolean ;
 begin
+  Result:=True ;
   mHGE.Gfx_BeginScene;
   mHGE.Gfx_Clear($00000000);
 

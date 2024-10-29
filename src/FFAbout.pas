@@ -30,7 +30,6 @@ end ;
 
 function RenderFuncAbout():Boolean ;
 var mx,my:Single ;
-    str:string ;
 begin
   Result:=False ;
 

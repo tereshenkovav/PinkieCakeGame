@@ -38,7 +38,7 @@ begin
 
   if mHGE.Input_KeyDown(HGEK_LBUTTON) then begin
     SRButBack.scalex:=110 ;
-    for i := 1 to GetCurrentLevelCount() do
+    for i := 1 to GetLevelCountByGame() do
       if PL.IsLevelAval(i) then begin
         SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
         if SRButBack.IsMouseOver(mx,my) then begin
@@ -103,7 +103,7 @@ begin
 
   fnt2.SetColor($FFFFFFFF) ;
   SRButBack.scalex:=110 ;
-  for i := 1 to GetCurrentLevelCount() do
+  for i := 1 to GetLevelCountByGame() do
     if PL.IsLevelAval(i) then begin
       SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
       SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;

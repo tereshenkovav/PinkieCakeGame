@@ -7,7 +7,7 @@ procedure GoFail ;
 
 implementation
 uses ObjModule, TAVHGEUtils, HGE, HGEFont, FFMenu, FFGame, Math,
-  CommonProc ;
+  CommonProc, StrUtils ;
 
 type
   TWinFailMode = (mWin,mFail) ;
@@ -30,7 +30,7 @@ begin
   if mHGE.Input_KeyDown(HGEK_ESCAPE) then GoMenu() ;
   if mHGE.Input_KeyDown(HGEK_F5) then GoAutoGame(ActiveLevel) ;
   if mHGE.Input_KeyDown(HGEK_ENTER) then
-    if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then
+    if (tekmode=mWin)and(ActiveLevel<GetLevelCountByGame()) then
       GoAutoGame(ActiveLevel+1) ;
 
   SRButBack.scalex:=145 ;
@@ -40,7 +40,7 @@ begin
     SRButBack.SetXY(BUT_REPLAY_X,BUT_Y) ;
     if SRButBack.IsMouseOver(mx,my) then GoAutoGame(ActiveLevel) ;
     SRButBack.SetXY(BUT_NEXT_X,BUT_Y) ;
-    if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then
+    if (tekmode=mWin)and(ActiveLevel<GetLevelCountByGame()) then
       if SRButBack.IsMouseOver(mx,my) then GoAutoGame(ActiveLevel+1) ;
   end;
 
@@ -61,7 +61,7 @@ begin
   sprBack.Render(0,0) ;
 
   if tekmode=mWin then begin
-    if ActiveLevel<GetCurrentLevelCount then
+    if ActiveLevel<GetLevelCountByGame() then
       SRWin.RenderAt(300,250)
     else
       SRFinalWin.RenderAt(150,150)
@@ -76,7 +76,7 @@ begin
   SRButBack.Render() ;
   fnt2.PrintF(BUT_MENU_X,BUT_Y-10,HGETEXT_CENTER,Texts.Values['BUT_MENU'],[]);
 
-  if (tekmode=mWin)and(ActiveLevel<GetCurrentLevelCount) then begin
+  if (tekmode=mWin)and(ActiveLevel<GetLevelCountByGame()) then begin
     SRButBack.SetXY(BUT_NEXT_X,BUT_Y) ;
     SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
     SRButBack.Render() ;
@@ -91,12 +91,8 @@ begin
   SRButBack.scalex:=100 ;
 
   fnt2.SetColor($FF404040);
-  if tekmode=mWin then begin
-    if ActiveLevel<GetCurrentLevelCount then
-      str:=Texts.Values['WINTEXT']
-    else
-      str:=Texts.Values['FINALWINTEXT'] ;
-  end
+  if tekmode=mWin then
+    str:=Texts.Values[IfThen(ActiveLevel<GetLevelCountByGame(),'WINTEXT','FINALWINTEXT')]
   else
     str:=Texts.Values['FAILTEXT'] ;
 

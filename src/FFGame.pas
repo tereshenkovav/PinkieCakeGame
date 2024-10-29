@@ -13,18 +13,17 @@ const
 procedure LoadGameResources() ;
 procedure GoGameLevel(Level:Integer) ;
 procedure UnloadGameResources() ;
-function GetCurrentLevelCount():Integer ;
 
 implementation
 uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   FFWinFail, SpriteEffects, HGESprite, Gamer, Classes,
-  SysUtils, Water, Math ;
+  SysUtils, Water, Math, Generics.Collections ;
 
 type
   TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft) ;
 
 var
-   sprCake:array[0..31] of IHGESprite ;
+   sprCakes:TList<IHGESprite> ;
    sprWall:IHGESprite ;
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
@@ -40,16 +39,9 @@ var
    LevelText:string ;
    pause:Boolean ;
 
-
-function GetCurrentLevelCount():Integer ;
-begin
-  Result:=GetLevelCountByGame() ;
-end;
-
 procedure LoadLevel(n:Integer) ;
 var i,j:Integer ;
     List:TStringList ;
-    ise:Boolean ;
 begin
   SEPool.DelAllEffects ;
 
@@ -101,43 +93,35 @@ begin
 end;
 
 function IsWin():Boolean ;
-var i,j,cnt:Integer ;
+var i,j:Integer ;
 begin
-
-  cnt:=0 ;
+  Result:=True ;
   for i := 0 to BLOCKNX-1 do
     for j := 0 to BLOCKNY - 1 do
-      if arr_places[i,j]=pCake then Inc(cnt) ;
-
-  Result:=(cnt=0) ;
+      if arr_places[i,j]=pCake then Exit(False) ;
 end;
 
 function IsGameFail():Boolean ;
 begin
   Result:=False ;
-  if not Result then
-    Result:=G.GetY+BLOCKH>=Wt.WaterLevel ;
-  
-  if not Result then
-    Result:=G.GetY+BLOCKH>=SWindowOptions.Height ;
-      
+  if G.GetY+BLOCKH>=Wt.WaterLevel then Exit(True) ;
+  if G.GetY+BLOCKH>=SWindowOptions.Height then Exit(True) ;
 end;
 
 procedure LoadGameResources() ;
 var i,j:Integer ;
-    CakeCount:Integer ;
 begin
   SndJump:=mHGE.Effect_Load('sounds\jump.wav') ;
   SndGun:=mHGE.Effect_Load('sounds\gun.wav') ;
   SndSpring:=mHGE.Effect_Load('sounds\spring.wav') ;
 
-  CakeCount:=0 ;
-  while FileExists(Format('images\cake%d.png',[CakeCount+1])) do
-    Inc(CakeCount) ;
-  mHGE.System_Log('CakeCount=%d',[CakeCount]) ;
-
-  for i := 0 to CakeCount-1 do
-    sprCake[i]:=LoadSizedSprite(mHGE,Format('cake%d.png',[i+1])) ;
+  sprCakes:=TList<IHGESprite>.Create() ;
+  i:=1 ;
+  while FileExists(Format('images\cake%d.png',[i])) do begin
+    sprCakes.Add(LoadSizedSprite(mHGE,Format('cake%d.png',[i]))) ;
+    Inc(i) ;
+  end;
+  mHGE.System_Log('CakeCount=%d',[sprCakes.Count]) ;
 
   sprWall:=LoadSizedSprite(mHGE,'wall.png') ;
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
@@ -167,7 +151,7 @@ begin
       end
       else
       arr_blocks[i,j]:=TSpriteRender.Create(
-        sprCake[Round(Random(CakeCount))],
+        sprCakes[Round(Random(sprCakes.Count))],
         GetBlockLeft(i),GetBlockTop(j));
 
       arr_blocks[i,j].transp:=IfThen(arr_places[i,j]=pSpace,100,0) ;
@@ -181,18 +165,14 @@ end ;
 procedure UnloadGameResources() ;
 begin
   SRPool.DelAllRenders ;
+  sprCakes.Free ;
   SRGamer.Free ;
 end;
 
 function FrameFuncGame():Boolean ;
-var mx,my:Single ;
-    i,j,k:Integer ;
-    isfail:Boolean ;
-    C1,C2:Cardinal ;
+var i,j:Integer ;
     dt:Single ;
-    
     PointGet:TPoint ;
-
     label fin, fin1 ;
 begin
   Result:=False ;
@@ -277,7 +257,7 @@ begin
       else begin
         PlaySound(SndJump) ;
 
-        G.InvertVY ;
+        G.JumpVert() ;
       end;
     end ;
 
@@ -339,11 +319,8 @@ end;
 function RenderFuncGame():Boolean ;
 var mx,my:Single ;
     i,j:Integer ;
-    color:LongWord ;
-    b:Byte ;
 begin
-  Result:=False ;
-
+  Result:=True ;
   mHGE.Input_GetMousePos(mx,my);
 
   mHGE.Gfx_BeginScene;
@@ -369,12 +346,8 @@ begin
 
   SRGamer.RenderAt(G.getX,G.getY);
 
-  if Wt.WaterLevel<SWindowOptions.Height then begin
-    b:=128 ;
-    Color:=$00FFFFFF ;
-    sprWater.SetColor(b shl 24 +(color and $FFFFFF)) ;
+  if Wt.WaterLevel<SWindowOptions.Height then
     sprWater.RenderStretch(0,Wt.WaterLevel,SWindowOptions.Width,SWindowOptions.Height);
-  end;
 
   if pause then begin
     sprPanel.Render(SWindowOptions.GetXCenter,120) ;
@@ -382,8 +355,6 @@ begin
   end;
 
   mHGE.Gfx_EndScene;
-
-  Result:=False ;
 end;
 
 procedure GoGameLevel(Level:Integer) ;

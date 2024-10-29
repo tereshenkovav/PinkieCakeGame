@@ -16,7 +16,7 @@ type
     function GetY():Integer ;
     constructor Create(AX,AY,AW:Integer) ;
     procedure Update(dt:Single) ;
-    procedure InvertVY() ;
+    procedure JumpVert() ;
     procedure JumpLeft() ;
     procedure JumpRight() ;
     procedure StopAndFix(newx:Single) ;
@@ -68,7 +68,7 @@ begin
   x:=newx ;
 end;
 
-procedure TGamer.InvertVY;
+procedure TGamer.JumpVert;
 begin
   VY:=-400 ;
 end;

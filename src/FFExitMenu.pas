@@ -20,7 +20,6 @@ const
 
 function FrameFuncExitMenu():Boolean ;
 var mx,my:Single ;
-    dt:Single ;
 begin
   Result:=False ;
 
@@ -47,14 +46,12 @@ begin
       Exit ;
     end ;
   end ;
-
 end ;
 
 function RenderFuncExitMenu():Boolean ;
 var mx,my:Single ;
-    HIB:Single ;
-    XC:Single ;
 begin
+  Result:=True ;
   mHGE.Input_GetMousePos(mx,my);
 
   mHGE.Gfx_BeginScene;
