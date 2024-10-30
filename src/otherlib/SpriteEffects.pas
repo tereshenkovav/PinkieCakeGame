@@ -122,6 +122,8 @@ type
     procedure DelRender(Sprite:IHGESprite) ;
     procedure DelRenderTagged(Sprite:IHGESprite;Tag:string) ; overload ;
     procedure DelRenderTagged(Sprite:IHGESprite;Tag:Integer) ; overload ;
+    procedure DelRenderByTag(Tag:Integer) ; overload ;
+    procedure DelRenderByTag(Tag:string) ; overload ;
     procedure DelAllRenders ;
     function Count():Integer ;
     procedure Render ;
@@ -650,6 +652,16 @@ end;
 procedure TSpriteRenderPool.DelRender(Sprite: IHGESprite);
 begin
   ListSpriteRenders.Remove(GetRenderBySprite(Sprite)) ;
+end;
+
+procedure TSpriteRenderPool.DelRenderByTag(Tag: string);
+begin
+  ListSpriteRenders.Remove(GetRenderByTag(Tag)) ;
+end;
+
+procedure TSpriteRenderPool.DelRenderByTag(Tag: Integer);
+begin
+  ListSpriteRenders.Remove(GetRenderByTag(Tag)) ;
 end;
 
 procedure TSpriteRenderPool.DelRenderTagged(Sprite: IHGESprite; Tag: string);

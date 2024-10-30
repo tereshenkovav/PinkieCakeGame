@@ -25,4 +25,5 @@ LEVEL_HINT_3=You can leap on a muffin higher. Eat the piramid from top do down!
 LEVEL_HINT_4=Use the spring for high leaps!
 LEVEL_HINT_5=Use the party cannon for long leaps!
 LEVEL_HINT_6=Beware the rising syrup!
+LEVEL_HINT_7=Some blocks go down if you jump on them.
 VERSION=v1.0.0

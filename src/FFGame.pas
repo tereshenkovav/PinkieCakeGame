@@ -20,11 +20,12 @@ uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   SysUtils, Water, Math, Generics.Collections ;
 
 type
-  TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft) ;
+  TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft,pBlockDown) ;
 
 var
    sprCakes:TList<IHGESprite> ;
    sprWall:IHGESprite ;
+   sprBlockDown:IHGESprite ;
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
    sprBorder:IHGESprite ;
@@ -127,6 +128,7 @@ begin
   mHGE.System_Log('CakeCount=%d',[sprCakes.Count]) ;
 
   sprWall:=LoadSizedSprite(mHGE,'wall.png') ;
+  sprBlockdown:=LoadSizedSprite(mHGE,'blockdown.png') ;
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
   sprGun:=LoadSizedSprite(mHGE,'gun.png') ;
   sprBorder:=LoadSizedSprite(mHGE,'border.png') ;
@@ -138,6 +140,10 @@ begin
       if arr_places[i,j]=pWall then
         SRPool.AddRenderTagged(TSpriteRender.Create(
           sprWall, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
+      else
+      if arr_places[i,j]=pBlockdown then
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprBlockdown, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
       else
       if arr_places[i,j]=pSpring then
         SRPool.AddRenderTagged(TSpriteRender.Create(
@@ -224,11 +230,29 @@ begin
   end ;
 
     if PointGet.X<>-1 then begin
+      if arr_places[PointGet.X,PointGet.Y]=pBlockdown then begin
+        arr_places[PointGet.X,PointGet.Y]:=pSpace ;
+        SRPool.DelRenderByTag(calcTag(PointGet)) ;
+        if PointGet.Y>0 then begin
+          arr_places[PointGet.X,PointGet.Y-1]:=pBlockdown ;
+          SRPool.AddRenderTagged(TSpriteRender.Create(
+            sprBlockdown, GetBlockLeft(PointGet.X),GetBlockTop(PointGet.Y-1)),
+            calcTag(PointGet.X,PointGet.Y-1)) ;
+        end;
+
+        PlaySound(SndJump) ;
+        G.JumpVert() ;
+      end
+      else
       if arr_places[PointGet.X,PointGet.Y]=pCake then begin
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
         SEPool.AddEffect(TSETransparentLinear.Create(
           SRPool.GetRenderByTag(calcTag(PointGet)),0,100,500));
-      end ;
+
+        PlaySound(SndJump) ;
+        G.JumpVert() ;
+      end
+      else
       if arr_places[PointGet.X,PointGet.Y]=pSpring then begin
         PlaySound(SndSpring) ;
 
