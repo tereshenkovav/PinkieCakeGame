@@ -29,7 +29,6 @@ var
    sprGun:IHGESprite ;
    sprBorder:IHGESprite ;
    sprPanel:IHGESprite ;
-   arr_blocks:array[0..31,0..31] of TSpriteRender ;
    arr_places:array[0..31,0..31] of TPlace ;
 
    SRGamer:TSpriteRender ;
@@ -108,6 +107,16 @@ begin
   if G.GetY+BLOCKH>=SWindowOptions.Height then Exit(True) ;
 end;
 
+function calcTag(i,j:Integer):Integer ; overload ;
+begin
+  Result:=i*1024+j ;
+end;
+
+function calcTag(p:TPoint):Integer ; overload ;
+begin
+  Result:=calcTag(p.X,p.Y) ;
+end;
+
 procedure LoadGameResources() ;
 var i,j:Integer ;
 begin
@@ -133,30 +142,27 @@ begin
   for i := 0 to BLOCKNX - 1 do
     for j := 0 to BLOCKNY - 1 do begin
       if arr_places[i,j]=pWall then
-      arr_blocks[i,j]:=TSpriteRender.Create(
-        sprWall, GetBlockLeft(i),GetBlockTop(j))
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprWall, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
       else
       if arr_places[i,j]=pSpring then
-      arr_blocks[i,j]:=TSpriteRender.Create(
-        sprSpring, GetBlockLeft(i),GetBlockTop(j))
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprSpring, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
       else
       if arr_places[i,j]=pGunRight then
-      arr_blocks[i,j]:=TSpriteRender.Create(
-        sprGun, GetBlockLeft(i),GetBlockTop(j))
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprGun, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
       else
       if arr_places[i,j]=pGunLeft then begin
-        arr_blocks[i,j]:=TSpriteRender.Create(
-          sprGun, GetBlockLeft(i),GetBlockTop(j)) ;
-        arr_blocks[i,j].mirror:=[mirrHorz];  
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprGun, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j)) ;
+        SRPool.GetRenderByTag(calcTag(i,j)).mirror:=[mirrHorz];
       end
       else
-      arr_blocks[i,j]:=TSpriteRender.Create(
-        sprCakes[Round(Random(sprCakes.Count))],
-        GetBlockLeft(i),GetBlockTop(j));
-
-      arr_blocks[i,j].transp:=IfThen(arr_places[i,j]=pSpace,100,0) ;
-
-      SRPool.AddRender(arr_blocks[i,j]);
+      if arr_places[i,j]=pCake then
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprCakes[Round(Random(sprCakes.Count))],
+          GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j));
     end;
 
   SRGamer:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_gamer.png'));
@@ -227,7 +233,7 @@ begin
       if arr_places[PointGet.X,PointGet.Y]=pCake then begin
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
         SEPool.AddEffect(TSETransparentLinear.Create(
-          arr_blocks[PointGet.X,PointGet.Y],0,100,500));
+          SRPool.GetRenderByTag(calcTag(PointGet)),0,100,500));
       end ;
       if arr_places[PointGet.X,PointGet.Y]=pSpring then begin
         PlaySound(SndSpring) ;
@@ -242,7 +248,7 @@ begin
           GetBlockTop(PointGet.Y),+1) ;
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
         SEPool.AddEffect(TSETransparentLinear.Create(
-          arr_blocks[PointGet.X,PointGet.Y],0,100,500));
+          SRPool.GetRenderByTag(calcTag(PointGet)),0,100,500));
       end
       else
       if arr_places[PointGet.X,PointGet.Y]=pGunLeft then begin
@@ -252,7 +258,7 @@ begin
           GetBlockTop(PointGet.Y),-1) ;
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
         SEPool.AddEffect(TSETransparentLinear.Create(
-          arr_blocks[PointGet.X,PointGet.Y],0,100,500));
+          SRPool.GetRenderByTag(calcTag(PointGet)),0,100,500));
       end
       else begin
         PlaySound(SndJump) ;
@@ -312,8 +318,6 @@ Fin1:
 
   G.Update(dt);
   Wt.Update(dt);
-
-  Result:=False ;
 end;
 
 function RenderFuncGame():Boolean ;
