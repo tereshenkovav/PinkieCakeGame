@@ -232,13 +232,12 @@ begin
     if PointGet.X<>-1 then begin
       if arr_places[PointGet.X,PointGet.Y]=pBlockdown then begin
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
-        SRPool.DelRenderByTag(calcTag(PointGet)) ;
-        if PointGet.Y>0 then begin
-          arr_places[PointGet.X,PointGet.Y-1]:=pBlockdown ;
-          SRPool.AddRenderTagged(TSpriteRender.Create(
-            sprBlockdown, GetBlockLeft(PointGet.X),GetBlockTop(PointGet.Y-1)),
-            calcTag(PointGet.X,PointGet.Y-1)) ;
-        end;
+        SEPool.AddEffect(TSEMovementLinear.Create(
+          SRPool.GetRenderByTag(calcTag(PointGet)),
+          GetBlockLeft(PointGet.X),GetBlockTop(PointGet.Y),
+          GetBlockLeft(PointGet.X),GetBlockTop(PointGet.Y-IfThen(PointGet.Y=0,2,1)),250));
+        SRPool.GetRenderByTag(calcTag(PointGet)).Tag:=IntToStr(calcTag(PointGet.X,PointGet.Y-1)) ;
+        if PointGet.Y>0 then arr_places[PointGet.X,PointGet.Y-1]:=pBlockdown ;
 
         PlaySound(SndJump) ;
         G.JumpVert() ;
