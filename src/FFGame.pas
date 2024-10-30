@@ -39,7 +39,7 @@ var
    pause:Boolean ;
 
 procedure LoadLevel(n:Integer) ;
-var i,j:Integer ;
+var i,j,k:Integer ;
     List:TStringList ;
 begin
   SEPool.DelAllEffects ;
@@ -47,35 +47,29 @@ begin
   List:=TStringList.Create ;
   List.LoadFromFile(Format('levels\pinki_level%d',[n])) ;
 
-  G:=TGamer.Create(StrToInt(List[0]),StrToInt(List[1]),BLOCKW) ;
-  with TStringList.Create() do begin
-    CommaText:=List[2] ;
-    if Count>0 then begin
-
-      if Strings[0]='water' then
-        Wt:=CreateWater(StrToInt(Strings[1]),Strings[2]='up')
-      else
-        Wt:=CreateFakeWater() ;
-
+  G:=TGamer.Create(StrToInt(List.Values['PlayerX']),StrToInt(List.Values['PlayerY']),BLOCKW) ;
+  if List.IndexOfName('Water')<>-1 then
+    with TStringList.Create() do begin
+      CommaText:=List.Values['Water'] ;
+      Wt:=CreateWater(StrToInt(Strings[0]),Strings[1]='up') ;
+      Free ;
     end
-    else
-      Wt:=CreateFakeWater() ;
-    Free ;
-  end;
+  else
+    Wt:=CreateFakeWater() ;
 
-  LevelText:=Texts.Values[Trim(List[3])] ;
+  if List.IndexOfName('Hint')<>-1 then
+    LevelText:=Texts.Values[List.Values['Hint']]
+  else
+    LevelText:='' ;
 
-  List.Delete(0) ; List.Delete(0) ; List.Delete(0) ; List.Delete(0) ;
-
-  for j := BLOCKNY - 1 downto 0 do begin
-    for i := 0 to BLOCKNX - 1 do begin
-    try
-      arr_places[i,j]:=TPlace(StrToInt(List[List.Count-1-j][i+1])) ;
-    except
-      arr_places[i,j]:=pSpace ;
-    end;
-    end;
-  end;
+  k:=List.IndexOf('MAP')+1 ;
+  for j := 0 to BLOCKNY - 1 do
+    for i := 0 to BLOCKNX - 1 do
+      try
+        arr_places[i,BLOCKNY-1-j]:=TPlace(StrToInt(List[k+j][i+1])) ;
+      except
+        arr_places[i,BLOCKNY-1-j]:=pSpace ;
+      end;
   List.Free ;
 
   mHGE.System_Log('Load level %d OK',[n]);

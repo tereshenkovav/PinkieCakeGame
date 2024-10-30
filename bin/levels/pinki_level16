@@ -1,7 +1,7 @@
-50
-20
-water,400,down
-
+PlayerX=50
+PlayerY=20
+Water=400,down
+MAP
 10100000000
 00001001000
 00000000010
