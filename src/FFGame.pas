@@ -17,7 +17,7 @@ procedure UnloadGameResources() ;
 implementation
 uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   FFWinFail, SpriteEffects, HGESprite, Gamer, Classes,
-  SysUtils, Water, Math, Generics.Collections ;
+  SysUtils, Water, Enemy, Math, Generics.Collections ;
 
 type
   TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft,pBlockDown) ;
@@ -25,6 +25,7 @@ type
 var
    sprCakes:TList<IHGESprite> ;
    sprWall:IHGESprite ;
+   sprEnemy0:IHGESprite ;
    sprBlockDown:IHGESprite ;
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
@@ -35,9 +36,20 @@ var
    SRGamer:TSpriteRender ;
    G:TGamer ;
    Wt:TWater ;
+   En:TEnemy ;
 
    LevelText:string ;
    pause:Boolean ;
+
+function GetBlockTop(j:Integer):Integer ;
+begin
+  Result:=SWindowOptions.Height-BOTTOM_SPACE-BLOCKH*(j+1) ;
+end;
+
+function GetBlockLeft(i:Integer):Integer ;
+begin
+  Result:=LEFT_SPACE+BLOCKW*i ;
+end;
 
 procedure LoadLevel(n:Integer) ;
 var i,j,k:Integer ;
@@ -58,6 +70,17 @@ begin
   else
     Wt:=CreateFakeWater() ;
 
+  if List.IndexOfName('Enemy')<>-1 then
+    with TStringList.Create() do begin
+      CommaText:=List.Values['Enemy'] ;
+      En:=TEnemyStd.Create(getBlockLeft(StrToInt(Strings[0])),
+        getBlockLeft(StrToInt(Strings[1])),
+        getBlockTop(StrToInt(Strings[2]))) ;
+      Free ;
+    end
+  else
+    En:=TEnemy.Create() ;
+
   if List.IndexOfName('Hint')<>-1 then
     LevelText:=Texts.Values[List.Values['Hint']]
   else
@@ -76,16 +99,6 @@ begin
   mHGE.System_Log('Load level %d OK',[n]);
 end;
 
-function GetBlockTop(j:Integer):Integer ;
-begin
-  Result:=SWindowOptions.Height-BOTTOM_SPACE-BLOCKH*(j+1) ;
-end;
-
-function GetBlockLeft(i:Integer):Integer ;
-begin
-  Result:=LEFT_SPACE+BLOCKW*i ;
-end;
-
 function IsWin():Boolean ;
 var i,j:Integer ;
 begin
@@ -100,6 +113,7 @@ begin
   Result:=False ;
   if G.GetY+BLOCKH>=Wt.WaterLevel then Exit(True) ;
   if G.GetY+BLOCKH>=SWindowOptions.Height then Exit(True) ;
+  if En.IsGamerIntersect(G) then Exit(True) ;
 end;
 
 function calcTag(i,j:Integer):Integer ; overload ;
@@ -129,6 +143,7 @@ begin
 
   sprWall:=LoadSizedSprite(mHGE,'wall.png') ;
   sprBlockdown:=LoadSizedSprite(mHGE,'blockdown.png') ;
+  sprEnemy0:=LoadSizedSprite(mHGE,'enemy0.png') ;
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
   sprGun:=LoadSizedSprite(mHGE,'gun.png') ;
   sprBorder:=LoadSizedSprite(mHGE,'border.png') ;
@@ -335,6 +350,7 @@ Fin1:
 
   G.Update(dt);
   Wt.Update(dt);
+  En.Update(dt);
 end;
 
 function RenderFuncGame():Boolean ;
@@ -366,6 +382,8 @@ begin
   end; 
 
   SRGamer.RenderAt(G.getX,G.getY);
+
+  if En.getX()>0 then sprEnemy0.Render(En.getX(),En.getY()) ;
 
   if Wt.WaterLevel<SWindowOptions.Height then
     sprWater.RenderStretch(0,Wt.WaterLevel,SWindowOptions.Width,SWindowOptions.Height);

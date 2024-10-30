@@ -23,7 +23,8 @@ uses
   Water in 'Water.pas',
   FFAbout in 'FFAbout.pas',
   FFExitMenu in 'FFExitMenu.pas',
-  FFIntro in 'FFIntro.pas';
+  FFIntro in 'FFIntro.pas',
+  Enemy in 'Enemy.pas';
 
 begin
   Randomize() ;

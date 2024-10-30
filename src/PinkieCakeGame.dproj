@@ -131,6 +131,7 @@
         <DCCReference Include="FFAbout.pas"/>
         <DCCReference Include="FFExitMenu.pas"/>
         <DCCReference Include="FFIntro.pas"/>
+        <DCCReference Include="Enemy.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -173,6 +174,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="..\bin\PinkieCakeGame.exe" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName="..\bin\PinkieCakeGame.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>PinkieCakeGame.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\PinkieCakeGame.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
