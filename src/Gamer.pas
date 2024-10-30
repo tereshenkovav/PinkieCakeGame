@@ -28,6 +28,7 @@ type
     function IsMovingDown():Boolean ;
     function IsViewRight():Boolean ;
     function GetDistFromXCenter(AX:Integer):Integer ;
+    function IsVertCoverWall(wally,wallh:Integer):Boolean ;
   end;
 
 implementation
@@ -91,6 +92,11 @@ end;
 function TGamer.IsMovingDown: Boolean;
 begin
   Result:=VY>0 ;
+end;
+
+function TGamer.IsVertCoverWall(wally,wallh: Integer): Boolean;
+begin
+  Result:=Abs(y-wally)<wallh ;
 end;
 
 function TGamer.IsViewRight: Boolean;

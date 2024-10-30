@@ -190,11 +190,33 @@ begin
   SRGamer.Free ;
 end;
 
+// Расчет столкновения и съедания блока
+function isBlockHit(dt:Single; var p:TPoint):Boolean ;
+var i,j:Integer ;
+begin
+  Result:=False ;
+  for i := BLOCKNX-1 downto 0 do
+    for j := BLOCKNY - 1 downto 0 do
+      if arr_places[i,j]<>pSpace then
+        if G.IsIntersectVert(GetBlockTop(j)-BLOCKH,dt) then
+          if Abs(G.GetX()-GetBlockLeft(i))<BLOCKW then begin
+            if not Result then begin
+              p:=Point(i,j) ;
+              Result:=True ;
+            end
+            else begin
+              if G.GetDistFromXCenter(GetBlockLeft(i)+(BLOCKW div 2))<
+                G.GetDistFromXCenter(GetBlockLeft(p.X)+(BLOCKW div 2)) then
+                  p:=Point(i,j) ;
+            end;
+          end;
+end;
+
 function FrameFuncGame():Boolean ;
 var i,j:Integer ;
     dt:Single ;
     PointGet:TPoint ;
-    label fin, fin1 ;
+    label fin ;
 begin
   Result:=False ;
   
@@ -215,36 +237,8 @@ begin
   if mHGE.Input_KeyDown(HGEK_LEFT) or mHGE.Input_KeyDown(HGEK_A) then G.JumpLeft ;
   if mHGE.Input_KeyDown(HGEK_RIGHT) or mHGE.Input_KeyDown(HGEK_D) then G.JumpRight ;
 
-  if G.IsMovingDown then begin
-
-  // Расчет столкновения и съедания блока
-
-  PointGet.X:=-1 ;
-  PointGet.Y:=-1 ;
-
-  for i := BLOCKNX-1 downto 0 do begin
-
-    for j := BLOCKNY - 1 downto 0 do
-      if arr_places[i,j]<>pSpace then begin
-
-      if G.IsIntersectVert(GetBlockTop(j)-BLOCKH,dt) then
-
-        if Abs(G.GetX()-GetBlockLeft(i))<BLOCKW then begin
-          if PointGet.X=-1 then begin
-            PointGet.X:=i ; PointGet.Y:=j ;
-          end
-          else begin
-            if G.GetDistFromXCenter(GetBlockLeft(i)+(BLOCKW div 2))<
-              G.GetDistFromXCenter(GetBlockLeft(PointGet.X)+(BLOCKW div 2)) then begin
-                PointGet.X:=i ; PointGet.Y:=j ;
-              end;
-          end;
-       end;
-
-    end ; // j
-  end ;
-
-    if PointGet.X<>-1 then begin
+  if G.IsMovingDown then
+    if isBlockHit(dt,PointGet) then begin
       if arr_places[PointGet.X,PointGet.Y]=pBlockdown then begin
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
         SEPool.AddEffect(TSEMovementLinear.Create(
@@ -299,41 +293,28 @@ begin
       end;
     end ;
 
-  end;
-
-
   if G.IsIntersectLeft(LEFT_SPACE,dt) then G.StopAndFix(LEFT_SPACE) ;
   if G.IsIntersectRight(LEFT_SPACE+BLOCKW*BLOCKNX,dt) then G.StopAndFix(LEFT_SPACE+BLOCKW*(BLOCKNX-1)) ;
 
-  // Отскок от стены вправо
-  for i := 0 to BLOCKNX - 1 - 1 do begin
-    for j := 0 to BLOCKNY - 1 do
-      if arr_places[i,j]<>pSpace then
-        if G.IsIntersectLeft(GetBlockLeft(i)+BLOCKW,dt) then
-          if ((G.GetY>GetBlockTop(j))and(G.GetY<=GetBlockTop(j)+BLOCKH)) or
-             ((G.GetY+BLOCKH>GetBlockTop(j))and(G.GetY+BLOCKH<=GetBlockTop(j)+BLOCKH)) then begin
-             G.StopAndFix(GetBlockLeft(i)+BLOCKW) ;
-             GoTo Fin1 ;
-             end;
-  end;
+  // Отскок от стен
+  for j := 0 to BLOCKNY - 1 do
+    if G.IsVertCoverWall(GetBlockTop(j),BLOCKH) then begin
+      for i := 0 to BLOCKNX - 1 - 1 do
+        if arr_places[i,j]<>pSpace then
+          if G.IsIntersectLeft(GetBlockLeft(i)+BLOCKW,dt) then begin
+            G.StopAndFix(GetBlockLeft(i)+BLOCKW) ;
+            GoTo Fin ;
+          end;
+      for i := 0+1 to BLOCKNX - 1 do
+        if arr_places[i,j]<>pSpace then
+          if G.IsIntersectRight(GetBlockLeft(i),dt) then begin
+            G.StopAndFix(GetBlockLeft(i)-BLOCKW) ;
+            GoTo Fin ;
+          end ;
+    end;
 
-Fin1:
+Fin:
 
-  // Влево
-  for i := 0+1 to BLOCKNX - 1 do begin
-    for j := 0 to BLOCKNY - 1 do
-      if arr_places[i,j]<>pSpace then
-        if G.IsIntersectRight(GetBlockLeft(i),dt) then
-          if ((G.GetY>GetBlockTop(j))and(G.GetY<=GetBlockTop(j)+BLOCKH)) or
-             ((G.GetY+BLOCKH>GetBlockTop(j))and(G.GetY+BLOCKH<=GetBlockTop(j)+BLOCKH)) then begin
-             G.StopAndFix(GetBlockLeft(i)-BLOCKW) ;
-             Goto fin ;
-             end;
-  end;
-
-  Fin:
-
-  
   SEPool.Update(dt) ;
 
   if IsWin() then begin
