@@ -64,11 +64,11 @@ begin
   if List.IndexOfName('Water')<>-1 then
     with TStringList.Create() do begin
       CommaText:=List.Values['Water'] ;
-      Wt:=CreateWater(StrToInt(Strings[0]),Strings[1]='up') ;
+      Wt:=TWaterStd.Create(StrToInt(Strings[0]),Strings[1]='up') ;
       Free ;
     end
   else
-    Wt:=CreateFakeWater() ;
+    Wt:=TWater.Create() ;
 
   if List.IndexOfName('Enemy')<>-1 then
     with TStringList.Create() do begin
@@ -111,7 +111,7 @@ end;
 function IsGameFail():Boolean ;
 begin
   Result:=False ;
-  if G.GetY+BLOCKH>=Wt.WaterLevel then Exit(True) ;
+  if Wt.IsGamerIntersect(G) then Exit(True) ;
   if G.GetY+BLOCKH>=SWindowOptions.Height then Exit(True) ;
   if En.IsGamerIntersect(G) then Exit(True) ;
 end;

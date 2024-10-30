@@ -16,28 +16,14 @@ type
     Level:Single ;
     Dir:Integer ;
   public
+    constructor Create(StartLevel:Integer; IsUp:Boolean) ;
     procedure Update(dt:Single) ; override ;
     function IsGamerIntersect(G:TGamer):Boolean ; override ;
     function WaterLevel():Integer ; override ;
   end;
 
-function CreateWater(StartLevel:Integer; IsUp:Boolean):TWater ;
-function CreateFakeWater():TWater ;
-
 implementation
 uses FFGame, Math ;
-
-function CreateWater(StartLevel:Integer; IsUp:Boolean):TWater ;
-begin
-  Result:=TWaterStd.Create() ;
-  TWaterStd(Result).Level:=StartLevel ;
-  TWaterStd(Result).Dir:=IfThen(IsUp,-1,1) ;
-end;
-
-function CreateFakeWater():TWater ;
-begin
-  Result:=TWater.Create ;
-end;
 
 { TWater }
 
@@ -57,6 +43,12 @@ begin
 end;
 
 { TWaterStd }
+
+constructor TWaterStd.Create(StartLevel: Integer; IsUp: Boolean);
+begin
+  Level:=StartLevel ;
+  Dir:=IfThen(IsUp,-1,1) ;
+end;
 
 function TWaterStd.IsGamerIntersect(G: TGamer): Boolean;
 begin
