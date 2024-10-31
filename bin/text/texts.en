@@ -28,4 +28,5 @@ LEVEL_HINT_6=Beware the rising syrup!
 LEVEL_HINT_7=Some blocks go down if you jump on them.
 LEVEL_HINT_8=Avoid poisonous mushrooms!
 LEVEL_HINT_9=Avoid flying bats!
+LEVEL_HINT_10=Some blocks appear and disappear.
 VERSION=v1.0.0

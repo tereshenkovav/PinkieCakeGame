@@ -20,18 +20,21 @@ uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   SysUtils, Water, Enemy, Math, Generics.Collections ;
 
 type
-  TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft,pBlockDown) ;
+  TPlace = (pSpace,pCake,pWall,pSpring,pGunRight,pGunLeft,pBlockDown,pBlockTime) ;
 
 var
    sprCakes:TList<IHGESprite> ;
    sprWall:IHGESprite ;
    sprEnemy0,sprEnemy1:IHGESprite ;
    sprBlockDown:IHGESprite ;
+   sprBlockTime:IHGESprite ;
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
    sprBorder:IHGESprite ;
    sprPanel:IHGESprite ;
    arr_places:array[0..31,0..31] of TPlace ;
+   blockt:Single ;
+   blocktimeperiod:Single ;
 
    SRGamer:TSpriteRender ;
    G:TGamer ;
@@ -85,6 +88,16 @@ begin
     LevelText:=Texts.Values[List.Values['Hint']]
   else
     LevelText:='' ;
+
+  if List.IndexOfName('BlockTimePeriod')<>-1 then
+    blocktimeperiod:=StrToInt(List.Values['BlockTimePeriod'])
+  else
+    blocktimeperiod:=5.0 ;
+
+  if List.IndexOfName('BlockTimePhase')<>-1 then
+    blockt:=StrToInt(List.Values['BlockTimePhase'])
+  else
+    blockt:=0.0 ;
 
   k:=List.IndexOf('MAP')+1 ;
   for j := 0 to BLOCKNY - 1 do
@@ -143,6 +156,7 @@ begin
 
   sprWall:=LoadSizedSprite(mHGE,'wall.png') ;
   sprBlockdown:=LoadSizedSprite(mHGE,'blockdown.png') ;
+  sprBlockTime:=LoadSizedSprite(mHGE,'blocktime.png') ;
   sprEnemy0:=LoadSizedSprite(mHGE,'enemy0.png') ;
   sprEnemy1:=LoadSizedSprite(mHGE,'enemy1.png') ;
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
@@ -160,6 +174,10 @@ begin
       if arr_places[i,j]=pBlockdown then
         SRPool.AddRenderTagged(TSpriteRender.Create(
           sprBlockdown, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
+      else
+      if arr_places[i,j]=pBlocktime then
+        SRPool.AddRenderTagged(TSpriteRender.Create(
+          sprBlocktime, GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j))
       else
       if arr_places[i,j]=pSpring then
         SRPool.AddRenderTagged(TSpriteRender.Create(
@@ -253,6 +271,13 @@ begin
         G.JumpVert() ;
       end
       else
+      if arr_places[PointGet.X,PointGet.Y]=pBlocktime then begin
+        if blockt>blocktimeperiod/2 then begin
+          PlaySound(SndJump) ;
+          G.JumpVert() ;
+        end ;
+      end
+      else
       if arr_places[PointGet.X,PointGet.Y]=pCake then begin
         arr_places[PointGet.X,PointGet.Y]:=pSpace ;
         SEPool.AddEffect(TSETransparentLinear.Create(
@@ -316,6 +341,11 @@ begin
 
 Fin:
 
+  for i := 0 to BLOCKNX - 1 do
+    for j := 0 to BLOCKNY - 1 do
+      if arr_places[i,j]=pBlocktime then
+        SRPool.GetRenderByTag(calcTag(i,j)).transp:=IfThen(blockt>blocktimeperiod/2,0,100) ;
+
   SEPool.Update(dt) ;
 
   if IsWin() then begin
@@ -333,6 +363,8 @@ Fin:
   G.Update(dt);
   Wt.Update(dt);
   En.Update(dt);
+  blockt:=blockt+dt ;
+  if blockt>blocktimeperiod then blockt:=blockt-blocktimeperiod ;
 end;
 
 function RenderFuncGame():Boolean ;
