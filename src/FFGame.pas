@@ -15,7 +15,7 @@ procedure GoGameLevel(Level:Integer) ;
 procedure UnloadGameResources() ;
 
 implementation
-uses TAVHGEUtils, Windows, HGE, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
+uses TAVHGEUtils, Windows, HGE, HGEAnim, HGEFont, ObjModule, Effects,FFMenu, CommonProc,
   FFWinFail, SpriteEffects, HGESprite, Gamer, Classes,
   SysUtils, Water, Enemy, Math, Generics.Collections ;
 
@@ -36,6 +36,8 @@ var
    blockt:Single ;
    blocktimeperiod:Single ;
 
+   GamerAnim:IHGEAnimation ;
+   fixpos:Integer ;
    SRGamer:TSpriteRender ;
    G:TGamer ;
    Wt:TWater ;
@@ -141,6 +143,7 @@ end;
 
 procedure LoadGameResources() ;
 var i,j:Integer ;
+    Tex:ITexture ;
 begin
   SndJump:=mHGE.Effect_Load('sounds\jump.wav') ;
   SndGun:=mHGE.Effect_Load('sounds\gun.wav') ;
@@ -199,7 +202,14 @@ begin
           GetBlockLeft(i),GetBlockTop(j)),calcTag(i,j));
     end;
 
-  SRGamer:=TSpriteRender.Create(LoadSizedSprite(mHGE,'pinki_gamer.png'));
+  Tex:=mHGE.Texture_Load(PathLoader+'pinki_gamer.png') ;
+  GamerAnim:=THGEAnimation.Create(Tex,10,15,0,0,85,97) ;
+  GamerAnim.SetHotSpot(7,20) ;
+  GamerAnim.Play() ;
+  GamerAnim.Stop() ;
+  GamerAnim.SetFrame(3) ;
+
+  SRGamer:=TSpriteRender.Create(GamerAnim);
 end ;
 
 procedure UnloadGameResources() ;
@@ -229,6 +239,15 @@ begin
                   p:=Point(i,j) ;
             end;
           end;
+end;
+
+procedure ExecJump() ;
+begin
+  PlaySound(SndJump) ;
+  G.JumpVert() ;
+  GamerAnim.SetFrame(4) ;
+  GamerAnim.Resume() ;
+  fixpos:=G.GetY() ;
 end;
 
 function FrameFuncGame():Boolean ;
@@ -266,16 +285,11 @@ begin
           GetBlockLeft(PointGet.X),GetBlockTop(PointGet.Y-IfThen(PointGet.Y=0,2,1)),250));
         SRPool.GetRenderByTag(calcTag(PointGet)).Tag:=IntToStr(calcTag(PointGet.X,PointGet.Y-1)) ;
         if PointGet.Y>0 then arr_places[PointGet.X,PointGet.Y-1]:=pBlockdown ;
-
-        PlaySound(SndJump) ;
-        G.JumpVert() ;
+        ExecJump() ;
       end
       else
       if arr_places[PointGet.X,PointGet.Y]=pBlocktime then begin
-        if blockt>blocktimeperiod/2 then begin
-          PlaySound(SndJump) ;
-          G.JumpVert() ;
-        end ;
+        if blockt>blocktimeperiod/2 then ExecJump() ;
       end
       else
       if arr_places[PointGet.X,PointGet.Y]=pCake then begin
@@ -283,8 +297,7 @@ begin
         SEPool.AddEffect(TSETransparentLinear.Create(
           SRPool.GetRenderByTag(calcTag(PointGet)),0,100,500));
 
-        PlaySound(SndJump) ;
-        G.JumpVert() ;
+        ExecJump() ;
       end
       else
       if arr_places[PointGet.X,PointGet.Y]=pSpring then begin
@@ -312,11 +325,8 @@ begin
         SEPool.AddEffect(TSETransparentLinear.Create(
           SRPool.GetRenderByTag(calcTag(PointGet)),0,100,500));
       end
-      else begin
-        PlaySound(SndJump) ;
-
-        G.JumpVert() ;
-      end;
+      else
+        ExecJump() ;
     end ;
 
   if G.IsIntersectLeft(LEFT_SPACE,dt) then G.StopAndFix(LEFT_SPACE) ;
@@ -363,6 +373,12 @@ Fin:
   G.Update(dt);
   Wt.Update(dt);
   En.Update(dt);
+  GamerAnim.Update(dt) ;
+  if GamerAnim.GetFrame=9 then begin
+    GamerAnim.Stop() ;
+    GamerAnim.SetFrame(3) ;
+  end ;
+
   blockt:=blockt+dt ;
   if blockt>blocktimeperiod then blockt:=blockt-blocktimeperiod ;
 end;
@@ -370,6 +386,7 @@ end;
 function RenderFuncGame():Boolean ;
 var mx,my:Single ;
     i,j:Integer ;
+    delta:Integer ;
 begin
   Result:=True ;
   mHGE.Input_GetMousePos(mx,my);
@@ -395,7 +412,13 @@ begin
     SRDiscordHelper.RenderAt(50,50);
   end; 
 
-  SRGamer.RenderAt(G.getX,G.getY);
+  delta:=0 ;
+  if (GamerAnim.GetFrame>=4) and (GamerAnim.GetFrame<=6) then
+    delta:=fixpos-G.GetY() ;
+  if (GamerAnim.GetFrame=7) then delta:=20 ;
+  if (GamerAnim.GetFrame=8) then delta:=10 ;
+
+  SRGamer.RenderAt(G.getX,G.getY+delta);
 
   if En.getCode()=TYPE_MUSH then sprEnemy0.Render(En.getX(),En.getY()) ;
   if En.getCode()=TYPE_BAT then sprEnemy1.Render(En.getX(),En.getY()) ;
