@@ -25,7 +25,7 @@ end ;
 
 function PosTop(i:Integer):Integer ;
 begin
-  Result:=140+((i-1) div LEVEL_BY_ROW)*50 ;
+  Result:=80+((i-1) div LEVEL_BY_ROW)*44 ;
 end ;
 
 function FrameFuncMenu():Boolean ;
@@ -102,7 +102,9 @@ begin
   SRStart.RenderAt(70,300);
 
   fnt2.SetColor($FFFFFFFF) ;
+  fnt2.SetScale(0.9) ;
   SRButBack.scalex:=110 ;
+  SRButBack.scaley:=90 ;
   for i := 1 to GetLevelCountByGame() do
     if PL.IsLevelAval(i) then begin
       SRButBack.SetXY(PosLeft(i),PosTop(i)) ;
@@ -111,6 +113,8 @@ begin
       fnt2.PrintF(PosLeft(i),PosTop(i)-10,HGETEXT_CENTER,Texts.Values['LEVEL_N'],[i]);
     end;
   SRButBack.scalex:=100 ;
+  SRButBack.scaley:=100 ;
+  fnt2.SetScale(1.0) ;
 
   SRButBack.setXY(BUT_EXIT_X,BUT_Y) ;
   SRButBack.bright:=IfThen(SRButBack.IsMouseOver(mx,my),140,100) ;
@@ -132,7 +136,7 @@ begin
 
   fnt2.SetColor($FF404040);
   fnt2.PrintF(40,120,HGETEXT_LEFT,Texts.Values['HISTORY'],[]);
-  fnt2.PrintF(560,60,HGETEXT_CENTER,Texts.Values['LEVELSELECT'],[]);
+  fnt2.PrintF(560,20,HGETEXT_CENTER,Texts.Values['LEVELSELECT'],[]);
 
   if not PL.IsSoundOn() then begin
     SRNoSound.bright:=IfThen(SRNoSound.IsMouseOver(mx,my),140,100) ;
