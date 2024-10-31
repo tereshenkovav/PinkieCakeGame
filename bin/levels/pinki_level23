@@ -1,7 +1,7 @@
 PlayerX=50
 PlayerY=100
 Hint=LEVEL_HINT_8
-Enemy=0,6,2
+Enemy=0,6,2,mush
 MAP
 00000000000
 22200000000

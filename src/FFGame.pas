@@ -25,7 +25,7 @@ type
 var
    sprCakes:TList<IHGESprite> ;
    sprWall:IHGESprite ;
-   sprEnemy0:IHGESprite ;
+   sprEnemy0,sprEnemy1:IHGESprite ;
    sprBlockDown:IHGESprite ;
    sprSpring:IHGESprite ;
    sprGun:IHGESprite ;
@@ -75,7 +75,7 @@ begin
       CommaText:=List.Values['Enemy'] ;
       En:=TEnemyStd.Create(getBlockLeft(StrToInt(Strings[0])),
         getBlockLeft(StrToInt(Strings[1])),
-        getBlockTop(StrToInt(Strings[2]))) ;
+        getBlockTop(StrToInt(Strings[2])),Strings[3]) ;
       Free ;
     end
   else
@@ -144,6 +144,7 @@ begin
   sprWall:=LoadSizedSprite(mHGE,'wall.png') ;
   sprBlockdown:=LoadSizedSprite(mHGE,'blockdown.png') ;
   sprEnemy0:=LoadSizedSprite(mHGE,'enemy0.png') ;
+  sprEnemy1:=LoadSizedSprite(mHGE,'enemy1.png') ;
   sprSpring:=LoadSizedSprite(mHGE,'spring.png') ;
   sprGun:=LoadSizedSprite(mHGE,'gun.png') ;
   sprBorder:=LoadSizedSprite(mHGE,'border.png') ;
@@ -364,7 +365,8 @@ begin
 
   SRGamer.RenderAt(G.getX,G.getY);
 
-  if En.getX()>0 then sprEnemy0.Render(En.getX(),En.getY()) ;
+  if En.getCode()=TYPE_MUSH then sprEnemy0.Render(En.getX(),En.getY()) ;
+  if En.getCode()=TYPE_BAT then sprEnemy1.Render(En.getX(),En.getY()) ;
 
   if Wt.WaterLevel<SWindowOptions.Height then
     sprWater.RenderStretch(0,Wt.WaterLevel,SWindowOptions.Width,SWindowOptions.Height);
