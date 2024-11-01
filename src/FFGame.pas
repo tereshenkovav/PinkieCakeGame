@@ -56,6 +56,15 @@ begin
   Result:=LEFT_SPACE+BLOCKW*i ;
 end;
 
+function isNotSpace(i,j:Integer):Boolean ;
+begin
+  if arr_places[i,j]=pSpace then Exit(False);
+  // Это условие везде дублируется
+  if arr_places[i,j]=pBlocktime then
+    Exit(blockt>=blocktimeperiod/2) ;
+  Result:=True ;
+end;
+
 procedure LoadLevel(n:Integer) ;
 var i,j,k:Integer ;
     List:TStringList ;
@@ -336,13 +345,13 @@ begin
   for j := 0 to BLOCKNY - 1 do
     if G.IsVertCoverWall(GetBlockTop(j),BLOCKH) then begin
       for i := 0 to BLOCKNX - 1 - 1 do
-        if arr_places[i,j]<>pSpace then
+        if isNotSpace(i,j) then
           if G.IsIntersectLeft(GetBlockLeft(i)+BLOCKW,dt) then begin
             G.StopAndFix(GetBlockLeft(i)+BLOCKW) ;
             GoTo Fin ;
           end;
       for i := 0+1 to BLOCKNX - 1 do
-        if arr_places[i,j]<>pSpace then
+        if isNotSpace(i,j) then
           if G.IsIntersectRight(GetBlockLeft(i),dt) then begin
             G.StopAndFix(GetBlockLeft(i)-BLOCKW) ;
             GoTo Fin ;
