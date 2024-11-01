@@ -70,5 +70,6 @@ sound.ini
 
 bin/text/deflang
 bin/text/credits.json
+bin/text/version.txt
 setup/windows/*.zip
 setup/windows/*.exe

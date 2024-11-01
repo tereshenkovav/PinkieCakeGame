@@ -6,11 +6,13 @@ procedure GoAbout ;
 
 implementation
 uses ObjModule, TAVHGEUtils, HGE, HGEFont, FFMenu, Math,
-  CommonProc, SysUtils ;
+  CommonProc, SysUtils, Classes ;
 
 const
   BUT_Y = 540 ;
   BUT_X = 402 ;
+
+var verstr:string ;
 
 function FrameFuncAbout():Boolean ;
 var mx,my:Single ;
@@ -48,10 +50,12 @@ begin
 
   fnt2.SetColor($FF404040);
   fnt2.PrintF(SWindowOptions.GetXCenter(),60,HGETEXT_CENTER,AnsiUpperCase(Texts.Values['GAME_TITLE']),[]) ;
-  fnt2.PrintF(SWindowOptions.GetXCenter(),80,HGETEXT_CENTER,Texts.Values['VERSION'],[]) ;
+  fnt2.PrintF(SWindowOptions.GetXCenter(),80,HGETEXT_CENTER,verstr,[]) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),130,HGETEXT_CENTER,Texts.Values['ABOUTTEXT'],[]) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),240,HGETEXT_CENTER,AnsiUpperCase(Texts.Values['CREDITS']),[]) ;
+  fnt2.SetScale(0.9) ;
   fnt2.PrintF(SWindowOptions.GetXCenter(),290,HGETEXT_CENTER,credits_str,[]) ;
+  fnt2.SetScale(1.0) ;
 
   sprMouse.Render(mx,my) ;
 
@@ -60,6 +64,17 @@ end;
 
 procedure GoAbout() ;
 begin
+  if FileExists('text\version.txt') then begin
+    with TStringList.Create() do begin
+      LoadFromFile('text\version.txt') ;
+      verstr:=Format(Texts.Values['VERSION'],
+        [Strings[0],Strings[1],Strings[2]]) ;
+      Free ;
+    end;
+  end
+  else
+    verstr:='' ;
+
   setFuncsNoRun(mHGE,FrameFuncAbout,RenderFuncAbout);
 end;
 
