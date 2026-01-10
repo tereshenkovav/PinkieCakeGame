@@ -1,0 +1,3 @@
+[submodule "HGEForDelphi"]
+	path = HGEForDelphi
+	url = https://github.com/tereshenkovav/HGEForDelphi.git

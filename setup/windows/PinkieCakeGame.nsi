@@ -93,7 +93,7 @@ Section "$(GameName)"
   SkipSleep:
 
   SetOutPath $INSTDIR
-  File ..\..\bin\*.dll
+  File ..\..\HGEForDelphi\distr\*.dll
   File ..\..\bin\PinkieCakeGame.exe
   File ..\..\graphics\main.ico
 
