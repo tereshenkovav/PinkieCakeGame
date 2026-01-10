@@ -16,7 +16,8 @@
 
 Проект разработан на языке ObjectPascal в IDE Delphi 10, в качестве графической библиотеки
 используется [HGE](https://sourceforge.net/projects/hge/), его портированная версия для Delphi [HGE For Delphi](https://sourceforge.net/projects/hgefordelphi/)
-с небольшими доработками.
+с небольшими доработками автором в репозитории
+[HGEForDelphi](https://github.com/tereshenkovav/HGEForDelphi), подключенная как субмодуль git.
 
 ## Состав репозитория
 
@@ -29,7 +30,7 @@
 
 Для сборки проекта нужен установленный
 [Delphi](https://delphi.embarcadero.com/)
-(проверено с версиями 10 и 11).
+(проверено с версиями 10, 11, 12).
 
 Создание дистрибутива для Windows выполняется с помощью программы
 [NSIS](https://nsis.sourceforge.io)
@@ -41,13 +42,20 @@
 
 ### Сборка
 
-Для сборки проекта в Windows при помощи Delphi нужно открыть проект
+Сначала нужно обновить субмодули командами
+```
+git submodule init
+git submodule update
+```
+после чего загрузится модуль HGEForDelphi.
+Далее для сборки проекта при помощи Delphi нужно открыть проект
 `src\PinkieCakeGame.dproj` и выполнить его сборку в конфигурации Release для платформы Win32.
-В каталоге bin появится исполняемый файл `PinkieCakeGame.exe`
+В каталоге `bin` появится исполняемый файл `PinkieCakeGame.exe`
 
 ### Запуск
 
-Для запуска игры нужны динамические библиотеки `D3DX81ab.dll` и `bass.dll`, они включены в каталог `bin`
+Для запуска игры нужны динамические библиотеки `D3DX81ab.dll` и `bass.dll`, они включены
+в каталоге `distr` субмодуля HGEForDelphi.
 
 ### Создание дистрибутивов
 
